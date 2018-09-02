@@ -20,4 +20,7 @@ Ajouter cette ligne:
     ServerName chatsymfony
 </VirtualHost>` au fichier : `C:\xampp\apache\conf\extra\httpd-vhosts.conf`
 
+run:
+`$ yarn encore dev --watch`
+
 Restart apache : go to http://chatsymfony/
