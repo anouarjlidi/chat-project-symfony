@@ -10,7 +10,7 @@ Encore
 
     /*
      * ENTRY CONFIG
-     *
+     *Encore.enableSassLoader
      * Add 1 entry for each "page" of your app
      * (including one that's included on every page - e.g. "app")
      *
@@ -35,13 +35,13 @@ Encore
     .enableVersioning(Encore.isProduction())
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .enableSassLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
 
     // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
+    .autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();
