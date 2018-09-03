@@ -5,10 +5,13 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/{_locale}", defaults={"_locale": "%locale%"}, requirements={"_locale": "%available_locale%"})
+ */
 class MainController extends AbstractController
 {
     /**
-     * @Route("/", name="main")
+     * @Route("", name="main")
      */
     public function index()
     {
