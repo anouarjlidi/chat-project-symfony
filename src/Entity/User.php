@@ -17,6 +17,9 @@ class User extends BaseUser
      */
     protected $id;
 
+    /** @ORM\Column(length=2, nullable=true) */
+    private $locale;
+
     public function __construct()
     {
         parent::__construct();
@@ -25,5 +28,21 @@ class User extends BaseUser
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param mixed $locale
+     */
+    public function setLocale($locale): void
+    {
+        $this->locale = $locale;
     }
 }

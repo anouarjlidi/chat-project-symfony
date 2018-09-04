@@ -18,7 +18,11 @@ security:
                 csrf_token_generator: security.csrf.token_manager
                 login_path:             fos_user_security_login
                 check_path:             fos_user_security_check
-            logout:       true
+                always_use_default_target_path: false
+                default_target_path:            main
+            logout:
+                path:   fos_user_security_logout
+                target: main
             anonymous:    true
 
     access_control:
