@@ -7,8 +7,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}Welcome!{% endblock %}</title>
     <link rel="stylesheet" href="{{ asset('build/app.css') }}">
-    {#Tell google you have multiple language#}
-    {#https://support.google.com/webmasters/answer/189077?hl=fr#}
+    {#Google localized versions#}
+    {% set available_locale = available_locale|split('|') %}
+    {% set route = app.request.attributes.get('_route') %}
+    {% set route_params = app.request.attributes.get('_route_params') %}
+    {% set params = route_params|merge(app.request.query.all) %}
+    {% for locale in available_locale %}
+        <link rel="alternate" hreflang="{{ locale }}" href="{{ path(route, params|merge({ _locale: locale })) }}"/>
+    {% endfor %}
+    {#Google localized versions#}
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
