@@ -4,3 +4,7 @@ fos_user:
     requirements:
         _locale: '%available_locale%'
     defaults: { _locale: '%locale%'}
+
+fos_user_security_logout:
+    path:      /logout
+    defaults:  { _controller: FOSUserBundle:Security:logout, _method: POST }
