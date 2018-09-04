@@ -2,14 +2,20 @@
 
 namespace App\Entity;
 
+use App\Traits\SoftdeleteableTrait;
+use App\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User extends BaseUser
 {
+    use TimestampableTrait;
+    use SoftdeleteableTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
