@@ -1,8 +1,8 @@
-app:
-    navbar:
-        home: 'Home'
-        login: 'Login'
-        register: 'Register'
+navbar:
+    home: 'Home'
+    login: 'Login'
+    register: 'Register'
 
-fr: 'French'
-en: 'English'
+lang:
+    fr: 'French'
+    en: 'English'

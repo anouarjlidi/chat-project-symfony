@@ -1,8 +1,8 @@
-app:
-    navbar:
-        home: 'Accueil'
-        login: 'Connexion'
-        register: 'Créer un compte'
+navbar:
+    home: 'Accueil'
+    login: 'Connexion'
+    register: 'Créer un compte'
 
-fr: 'Français'
-en: 'Anglais'
+lang:
+    fr: 'Français'
+    en: 'Anglais'

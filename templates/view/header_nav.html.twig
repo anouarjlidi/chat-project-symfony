@@ -7,7 +7,7 @@
     <div class="collapse navbar-collapse" id="headerNavBar">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('main') }}">{{ 'app.navbar.home'|trans }}
+                <a class="nav-link" href="{{ path('main') }}">{{ 'navbar.home'|trans }}
                     <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
@@ -36,11 +36,11 @@
                 <a class="nav-link" href="#">Demo</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('fos_user_security_login') }}">{{ 'app.navbar.login'|trans }}</a>
+                <a class="nav-link" href="{{ path('fos_user_security_login') }}">{{ 'navbar.login'|trans }}</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link"
-                   href="{{ path('fos_user_registration_register') }}">{{ 'app.navbar.register'|trans }}</a>
+                   href="{{ path('fos_user_registration_register') }}">{{ 'navbar.register'|trans }}</a>
             </li>
             <li class="nav-item">
                 <div class="dropdown" id="selectLocale">
@@ -51,7 +51,8 @@
                         {% for locale in available_locale %}
                             <div data-value="{{ locale }}" data-href="{{ path(route, { _locale: locale }) }}"
                                  class="dropdown-item">
-                                <span class="flag-icon flag-icon-{{ locale }}"></span>{{ locale|trans }}
+                                {% set lang = 'lang.'~locale %}
+                                <span class="flag-icon flag-icon-{{ locale }}"></span>{{ lang|trans }}
                             </div>
                         {% endfor %}
                     </div>
