@@ -1,2 +1,2 @@
 @echo off
-echo Starting ...
+echo Starting update ... && cd ../../../ && git pull && composer install && yarn install && php bin/console doctrine:migrations:migrate -n && echo run this command if you want your css and js to be compiled while developing && echo yarn encore dev --watch &&  echo Go to http://chatsymfony

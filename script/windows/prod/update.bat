@@ -1,2 +1,2 @@
 @echo off
-echo Starting ...
+echo Starting update ... && cd ../../../ && git pull && composer install && yarn install && php bin/console doctrine:migrations:migrate -n && yarn encore production && echo Go to http://chatsymfony

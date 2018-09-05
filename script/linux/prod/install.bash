@@ -1,2 +1,4 @@
 #!/bin/bash
-echo "Starting ..."
+echo "Starting install ..."
+
+bash update.bash

@@ -1,26 +1,31 @@
-#Requirements
+# Requirements
+
 * composer
 * node & npm
 * yarn
 * apache
 * mysql server
 
-#Install
-`$ composer install`
-`$ yarn install`
-Ajouter les lignes clear cache update bdd (pas nécessaire pour le moment)
+- - - -
 
-Ajouter cette ligne:
-`127.0.0.1       chatsymfony` au fichier `C:\Windows\System32\drivers\etc\hosts`
+# Install
 
-Ajouter cette ligne:
+## Windows
+### Dev (write this line at the root path of the project after git clone)
+`cd script/windows/dev && install.bat`
+### Prod (write this line at the root path of the project after git clone)
+`cd script/windows/prod && install.bat`
 
-`<VirtualHost *:80>
-    DocumentRoot "C:/xampp/htdocs/public"
-    ServerName chatsymfony
-</VirtualHost>` au fichier : `C:\xampp\apache\conf\extra\httpd-vhosts.conf`
+## Linux
 
-run:
-`$ yarn encore dev --watch`
+- - - -
 
-Restart apache : go to http://chatsymfony/
+# Update project
+
+## Windows
+### Dev (write this line at the root path of the project)
+`cd script/windows/dev && update.bat`
+### Prod (write this line at the root path of the project)
+`cd script/windows/prod && update.bat`
+
+## Linux
