@@ -20,7 +20,7 @@
 
 - - - -
 
-# Update project
+# Update project (pull modification)
 
 ## Windows
 ### Dev (write this line at the root path of the project)
