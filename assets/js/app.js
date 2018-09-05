@@ -4,11 +4,11 @@ global.$ = global.jQuery = $;
 require('bootstrap');
 
 $(document).ready(function () {
-    $("#selectLocale").change(function () {
-        var $selectedLocale = $(this).val();
+    $("#selectLocale .dropdown-item").click(function () {
+        var $selectedLocale = $(this).data('value');
         var $currentLocale = $('html')[0].lang;
         if ($currentLocale !== $selectedLocale) {
-            var $url = $(this).find(':selected').data('href');
+            var $url = $(this).data('href');
             window.location.replace($url);
         }
     });

@@ -1,2 +1,11 @@
+.flag-icon-en {
+  @extend .flag-icon-us;
+}
+
+nav div.dropdown-item {
+  cursor: pointer;
+}
+
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";
+@import "~flag-icon-css/sass/flag-icon";
