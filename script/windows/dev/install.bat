@@ -27,6 +27,8 @@ IF /I "%AREYOUSURE%" NEQ "Y" GOTO END
         echo.
         echo DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/socialsock
         echo.
+        echo Don't forget to change socialsock to socialsock_dev
+        echo.
         echo in file .env of the project
         echo.
         setlocal
