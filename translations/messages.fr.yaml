@@ -3,3 +3,6 @@ app:
         home: 'Accueil'
         login: 'Connexion'
         register: 'Créer un compte'
+
+fr: 'Français'
+en: 'Anglais'

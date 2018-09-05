@@ -3,3 +3,6 @@ app:
         home: 'Home'
         login: 'Login'
         register: 'Register'
+
+fr: 'French'
+en: 'English'

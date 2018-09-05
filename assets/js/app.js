@@ -4,5 +4,12 @@ global.$ = global.jQuery = $;
 require('bootstrap');
 
 $(document).ready(function () {
-    console.log("ready!");
+    $("#selectLocale").change(function () {
+        var $selectedLocale = $(this).val();
+        var $currentLocale = $('html')[0].lang;
+        if ($currentLocale !== $selectedLocale) {
+            var $url = $(this).find(':selected').data('href');
+            window.location.replace($url);
+        }
+    });
 });

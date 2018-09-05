@@ -29,11 +29,11 @@ class KernelRequestListener
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        $user = $this->sam->getToken()->getUser();
         $route = $event->getRequest()->get('_route');
         if (!($event->isMasterRequest() AND '_wdt' !== $route)) {
             return;
         }
+        $user = $this->sam->getToken()->getUser();
     }
 
     public function onKernelResponse(FilterResponseEvent $event)
