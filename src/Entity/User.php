@@ -18,8 +18,8 @@ class User extends BaseUser
 
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="guid")
      */
     protected $id;
 
@@ -31,7 +31,7 @@ class User extends BaseUser
         parent::__construct();
     }
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
