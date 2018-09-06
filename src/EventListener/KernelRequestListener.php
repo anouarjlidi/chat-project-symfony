@@ -63,6 +63,9 @@ class KernelRequestListener
         }
     }
 
+    /**
+     * @param FilterResponseEvent $event
+     */
     private function createTempUser(FilterResponseEvent $event)
     {
         $request = $event->getRequest();

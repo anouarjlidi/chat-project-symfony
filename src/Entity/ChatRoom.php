@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Traits\SoftdeleteableTrait;
+use App\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,6 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ChatRoom
 {
+    use TimestampableTrait;
+    use SoftdeleteableTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Traits\SoftdeleteableTrait;
+use App\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class WebSite
 {
+    use TimestampableTrait;
+    use SoftdeleteableTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")

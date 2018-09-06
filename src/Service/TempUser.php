@@ -10,6 +10,10 @@ class TempUser
     private $tempUserId;
     private $tempSiteId;
 
+    /**
+     * TempUser constructor.
+     * @param RequestStack $requestStack
+     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
@@ -17,6 +21,9 @@ class TempUser
         $this->tempSiteId = null;
     }
 
+    /**
+     * @return array
+     */
     public function getInfo()
     {
         $request = $this->requestStack->getCurrentRequest();
