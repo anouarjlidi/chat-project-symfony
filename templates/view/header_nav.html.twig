@@ -48,7 +48,7 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         {% for locale in available_locale %}
                             <div data-value="{{ locale }}" data-href="{{ path(route, { _locale: locale }) }}"
-                                 class="dropdown-item">
+                                 class="dropdown-item {% if locale == app.request.getLocale() %}active{% endif %}">
                                 {% set lang = 'lang.'~locale %}
                                 <span class="flag-icon flag-icon-{{ locale }}"></span>{{ lang|trans }}
                             </div>
