@@ -3,6 +3,8 @@
 namespace App\EventListener;
 
 use App\Entity\User;
+use App\Entity\WebSite;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -12,18 +14,23 @@ class KernelRequestListener
 {
     private $sam;
     private $timeCookieTempUser;
+    private $em;
     private $user;
+    private $tempUserId;
 
     /**
      * KernelRequestListener constructor.
      * @param TokenStorage $sam
      * @param int $timeCookieTempUser
+     * @param EntityManager $em
      */
-    public function __construct(TokenStorage $sam, int $timeCookieTempUser)
+    public function __construct(TokenStorage $sam, int $timeCookieTempUser, EntityManager $em)
     {
         $this->sam = $sam;
         $this->timeCookieTempUser = $timeCookieTempUser;
+        $this->em = $em;
         $this->user = null;
+        $this->tempUserId = null;
     }
 
     /**
@@ -40,6 +47,10 @@ class KernelRequestListener
         }
     }
 
+    /**
+     * @param FilterResponseEvent $event
+     * @throws \Doctrine\ORM\ORMException
+     */
     public function onKernelResponse(FilterResponseEvent $event)
     {
         $route = $event->getRequest()->get('_route');
@@ -48,6 +59,7 @@ class KernelRequestListener
         }
         if (!$this->user instanceof User) {
             $this->createTempUser($event);
+            $this->createWebSite($event);
         }
     }
 
@@ -57,11 +69,35 @@ class KernelRequestListener
         $cookie = $request->cookies;
         if (!$cookie->has('tempUserId')) {
             $response = $event->getResponse();
-            $tempUserId = uniqid();
-            $event->getRequest()->attributes->set('tempUserId', $tempUserId);
+            $this->tempUserId = uniqid();
+            $event->getRequest()->attributes->set('tempUserId', $this->tempUserId);
             $request = $event->getRequest();
-            $tempUserId = $request->attributes->get('tempUserId');
-            $cookie = new Cookie("tempUserId", $tempUserId, time() + $this->timeCookieTempUser);
+            $this->tempUserId = $request->attributes->get('tempUserId');
+            $cookie = new Cookie("tempUserId", $this->tempUserId, time() + $this->timeCookieTempUser);
+            $response->headers->setCookie($cookie);
+        } else {
+            $this->tempUserId = $cookie->get("tempUserId");
+        }
+    }
+
+    /**
+     * @param FilterResponseEvent $event
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    private function createWebSite(FilterResponseEvent $event)
+    {
+        $webSiteRepo = $this->em->getRepository('App\Entity\WebSite');
+        $webSites = $webSiteRepo->findBy(['adminTempUser' => $this->tempUserId]);
+        if (empty($webSites)) {
+            $webSite = new WebSite();
+            $webSite->setHadAdminChat(true);
+            $webSite->setHasPrivateChat(false);
+            $webSite->setAdminTempUser($this->tempUserId);
+            $this->em->persist($webSite);
+            $this->em->flush();
+            $cookie = new Cookie("tempSiteId", $webSite->getId(), time() + $this->timeCookieTempUser);
+            $response = $event->getResponse();
             $response->headers->setCookie($cookie);
         }
     }

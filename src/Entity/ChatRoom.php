@@ -29,7 +29,7 @@ class ChatRoom
     /**
      * @ORM\ManyToOne(targetEntity="WebSite", inversedBy="chatRooms")
      */
-    private $webSite;
+    private $website;
 
     /**
      * @return mixed
@@ -80,16 +80,16 @@ class ChatRoom
     /**
      * @return mixed
      */
-    public function getWebSite()
+    public function getWebsite()
     {
-        return $this->webSite;
+        return $this->website;
     }
 
     /**
      * @param mixed $webSite
      */
-    public function setWebSite($webSite): void
+    public function setWebsite($webSite): void
     {
-        $this->webSite = $webSite;
+        $this->website = $webSite;
     }
 }

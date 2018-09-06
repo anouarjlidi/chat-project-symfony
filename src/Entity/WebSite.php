@@ -48,7 +48,7 @@ class WebSite
     private $chatRooms;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="websites")
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="webSites")
      */
     private $users;
 
