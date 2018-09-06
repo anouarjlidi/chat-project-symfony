@@ -2,6 +2,10 @@ navbar:
     home: 'Home'
     login: 'Login'
     register: 'Register'
+    demo:
+        demo: 'Demo'
+        see: 'See Demo Online'
+        see.myWebsite: 'See Demo on my Website (even offline)'
 
 lang:
     fr: 'French'

@@ -2,6 +2,10 @@ navbar:
     home: 'Accueil'
     login: 'Connexion'
     register: 'Créer un compte'
+    demo:
+        demo: 'Demo'
+        see: 'Voir la Demo en ligne'
+        see.myWebsite: 'Voir la Demo sur mon site (même hors-ligne)'
 
 lang:
     fr: 'Français'
