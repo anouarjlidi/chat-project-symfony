@@ -5,10 +5,10 @@ require('bootstrap');
 
 $(document).ready(function () {
     $("#selectLocale .dropdown-item").click(function () {
-        var $selectedLocale = $(this).data('value');
-        var $currentLocale = $('html')[0].lang;
+        const $selectedLocale = $(this).data('value');
+        const $currentLocale = $('html')[0].lang;
         if ($currentLocale !== $selectedLocale) {
-            var $url = $(this).data('href');
+            const $url = $(this).data('href');
             window.location.replace($url);
         }
     });
