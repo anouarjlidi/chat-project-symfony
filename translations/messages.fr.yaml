@@ -4,8 +4,11 @@ navbar:
     register: 'Créer un compte'
     demo:
         demo: 'Demo'
-        see: 'Voir la Demo en ligne'
-        see.myWebsite: 'Voir la Demo sur mon site (même hors-ligne)'
+        see: 'Voir la Demo en Ligne'
+        see.myWebsite: 'Voir la Demo sur mon Site'
+    features: 'Fonctionnalités'
+    pricing: 'Prix'
+    try.now: 'Essayez !'
 
 lang:
     fr: 'Français'

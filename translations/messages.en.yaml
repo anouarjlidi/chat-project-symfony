@@ -5,7 +5,10 @@ navbar:
     demo:
         demo: 'Demo'
         see: 'See Demo Online'
-        see.myWebsite: 'See Demo on my Website (even offline)'
+        see.myWebsite: 'See Demo on my Website'
+    features: 'Features'
+    pricing: 'Pricing'
+    try.now: 'Try it now !'
 
 lang:
     fr: 'French'

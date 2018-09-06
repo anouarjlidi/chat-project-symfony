@@ -97,7 +97,7 @@ class KernelRequestListener
             $webSites = $webSiteRepo->findBy(['adminTempUser' => $this->tempUserId]);
             if (empty($webSites)) {
                 $webSite = new WebSite();
-                $webSite->setHadAdminChat(true);
+                $webSite->setHasAdminChat(true);
                 $webSite->setHasPrivateChat(false);
                 $webSite->setAdminTempUser($this->tempUserId);
                 $this->em->persist($webSite);

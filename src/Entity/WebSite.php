@@ -35,7 +35,7 @@ class WebSite
     /**
      * @ORM\Column(type="boolean")
      */
-    private $hadAdminChat;
+    private $hasAdminChat;
 
     /**
      * @ORM\Column(type="boolean")
@@ -125,18 +125,18 @@ class WebSite
     /**
      * @return bool|null
      */
-    public function getHadAdminChat(): ?bool
+    public function getHasAdminChat(): ?bool
     {
-        return $this->hadAdminChat;
+        return $this->hasAdminChat;
     }
 
     /**
-     * @param bool $hadAdminChat
+     * @param bool $hasAdminChat
      * @return WebSite
      */
-    public function setHadAdminChat(bool $hadAdminChat): self
+    public function setHasAdminChat(bool $hasAdminChat): self
     {
-        $this->hadAdminChat = $hadAdminChat;
+        $this->hasAdminChat = $hasAdminChat;
 
         return $this;
     }
