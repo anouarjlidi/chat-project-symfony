@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Traits\SoftdeleteableTrait;
 use App\Traits\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -18,8 +19,8 @@ class User extends BaseUser
 
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
      */
     protected $id;
 
@@ -27,17 +28,23 @@ class User extends BaseUser
     private $locale;
 
     /**
+     * @ORM\ManyToMany(targetEntity="WebSite", inversedBy="users", cascade={"persist"})
+     */
+    private $webSites;
+
+    /**
      * User constructor.
      */
     public function __construct()
     {
         parent::__construct();
+        $this->webSites = new ArrayCollection();
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -56,5 +63,31 @@ class User extends BaseUser
     public function setLocale($locale): void
     {
         $this->locale = $locale;
+    }
+
+    /**
+     * @param WebSite $webSite
+     */
+    public function addWebSite(WebSite $webSite)
+    {
+        $this->webSites[] = $webSite;
+        $webSite->addUser($this);
+    }
+
+    /**
+     * @param WebSite $webSite
+     */
+    public function removeWebSite(WebSite $webSite)
+    {
+        $this->webSites->removeElement($webSite);
+        $webSite->removeUser($this);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWebSites()
+    {
+        return $this->chatRooms;
     }
 }

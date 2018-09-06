@@ -12,6 +12,7 @@ class KernelRequestListener
 {
     private $sam;
     private $timeCookieTempUser;
+    private $user;
 
     /**
      * KernelRequestListener constructor.
@@ -22,6 +23,7 @@ class KernelRequestListener
     {
         $this->sam = $sam;
         $this->timeCookieTempUser = $timeCookieTempUser;
+        $this->user = null;
     }
 
     /**
@@ -33,17 +35,18 @@ class KernelRequestListener
         if (!($event->isMasterRequest() AND '_wdt' !== $route)) {
             return;
         }
-        $user = $this->sam->getToken()->getUser();
+        if (!empty($this->sam->getToken())) {
+            $this->user = $this->sam->getToken()->getUser();
+        }
     }
 
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        $user = $this->sam->getToken()->getUser();
         $route = $event->getRequest()->get('_route');
         if (!($event->isMasterRequest() AND '_wdt' !== $route)) {
             return;
         }
-        if (!$user instanceof User) {
+        if (!$this->user instanceof User) {
             $this->createTempUser($event);
         }
     }

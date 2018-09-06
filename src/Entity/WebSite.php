@@ -12,8 +12,8 @@ class WebSite
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="guid")
      */
     private $id;
 
@@ -48,17 +48,33 @@ class WebSite
     private $chatRooms;
 
     /**
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="websites")
+     */
+    private $users;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     */
+    private $adminUser;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $adminTempUser;
+
+    /**
      * WebSite constructor.
      */
     public function __construct()
     {
         $this->chatRooms = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     /**
-     * @return int|null
+     * @return mixed
      */
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
@@ -182,5 +198,61 @@ class WebSite
     public function getChatRooms()
     {
         return $this->chatRooms;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function addUser(User $user)
+    {
+        $this->users[] = $user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function removeUser(User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getUsers()
+    {
+        return $this->chatRooms;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdminUser()
+    {
+        return $this->adminUser;
+    }
+
+    /**
+     * @param User $adminUser
+     */
+    public function setAdminUser(User $adminUser): void
+    {
+        $this->adminUser = $adminUser;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdminTempUser()
+    {
+        return $this->adminTempUser;
+    }
+
+    /**
+     * @param mixed $adminTempUser
+     */
+    public function setAdminTempUser($adminTempUser): void
+    {
+        $this->adminTempUser = $adminTempUser;
     }
 }
