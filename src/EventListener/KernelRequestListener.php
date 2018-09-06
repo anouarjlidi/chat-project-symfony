@@ -90,18 +90,26 @@ class KernelRequestListener
      */
     private function createWebSite(FilterResponseEvent $event)
     {
-        $webSiteRepo = $this->em->getRepository('App\Entity\WebSite');
-        $webSites = $webSiteRepo->findBy(['adminTempUser' => $this->tempUserId]);
-        if (empty($webSites)) {
-            $webSite = new WebSite();
-            $webSite->setHadAdminChat(true);
-            $webSite->setHasPrivateChat(false);
-            $webSite->setAdminTempUser($this->tempUserId);
-            $this->em->persist($webSite);
-            $this->em->flush();
-            $cookie = new Cookie("tempSiteId", $webSite->getId(), time() + $this->timeCookieTempUser);
-            $response = $event->getResponse();
-            $response->headers->setCookie($cookie);
+        $request = $event->getRequest();
+        $cookie = $request->cookies;
+        if (!$cookie->has('tempSiteId')) {
+            $webSiteRepo = $this->em->getRepository('App\Entity\WebSite');
+            $webSites = $webSiteRepo->findBy(['adminTempUser' => $this->tempUserId]);
+            if (empty($webSites)) {
+                $webSite = new WebSite();
+                $webSite->setHadAdminChat(true);
+                $webSite->setHasPrivateChat(false);
+                $webSite->setAdminTempUser($this->tempUserId);
+                $this->em->persist($webSite);
+                $this->em->flush();
+                $cookie = new Cookie("tempSiteId", $webSite->getId(), time() + $this->timeCookieTempUser);
+                $response = $event->getResponse();
+                $response->headers->setCookie($cookie);
+            } else {
+                $cookie = new Cookie("tempSiteId", $webSites->first()->getAdminTempUser(), time() + $this->timeCookieTempUser);
+                $response = $event->getResponse();
+                $response->headers->setCookie($cookie);
+            }
         }
     }
 }
