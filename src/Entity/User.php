@@ -26,11 +26,17 @@ class User extends BaseUser
     /** @ORM\Column(length=2, nullable=true) */
     private $locale;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         parent::__construct();
     }
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
