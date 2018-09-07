@@ -21,17 +21,8 @@
             <li class="nav-item"><a class="nav-link" href="#">{{ 'navbar.try.now'|trans }}</a></li>
         </ul>
         <ul class="navbar-nav ml-right">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="DemoMenuLink" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    {{ 'navbar.demo.demo'|trans }}
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="DemoMenuLink">
-                    <a class="dropdown-item {% if route == '' %}active{% endif %}"
-                       href="#">{{ 'navbar.demo.see'|trans }}</a>
-                    <a class="dropdown-item {% if route == '' %}active{% endif %}"
-                       href="#">{{ 'navbar.demo.see.myWebsite'|trans }}</a>
-                </div>
+            <li class="nav-item {% if route == 'config' %}active{% endif %}">
+                <a class="nav-link" href="{{ path('demo') }}">{{ 'navbar.demo'|trans }}</a>
             </li>
             <li class="nav-item {% if route == 'fos_user_security_login' %}active{% endif %}">
                 <a class="nav-link" href="{{ path('fos_user_security_login') }}">{{ 'navbar.login'|trans }}</a>

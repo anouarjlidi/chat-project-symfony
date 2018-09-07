@@ -2,13 +2,22 @@ navbar:
     home: 'Accueil'
     login: 'Connexion'
     register: 'Créer un compte'
-    demo:
-        demo: 'Demo'
-        see: 'Voir la Demo en Ligne'
-        see.myWebsite: 'Voir la Demo sur mon Site'
+    demo: 'Demo'
     features: 'Fonctionnalités'
     pricing: 'Prix'
     try.now: 'Essayez !'
+
+config:
+      demo:
+          developper:
+              insert: 'Insérez ce script'
+              all_page: 'sur toutes vos pages avant le tag'
+              open_page: "Ouvrez la page d'accueil de votre site ou n'importe quelle page (rien ne va se passer sur votre site)"
+              back_start: 'Puis revenez ici, et cliquez sur Commencer ! (rien ne va se passer sur votre site)'
+word:
+    wordpress: 'Wordpress'
+    developper: 'Développeur'
+    start: 'Commencer'
 
 lang:
     fr: 'Français'
