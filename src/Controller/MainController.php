@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -34,6 +35,22 @@ class MainController extends AbstractController
     public function pricing()
     {
         return $this->render('main/pricing.html.twig', [
+        ]);
+    }
+
+    /**
+     * @Route("/demo", name="demo")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function demo(Request $request)
+    {
+        $tempSiteId = $request->attributes->get('tempSiteId');
+        if (empty($tempSiteId)) {
+            $tempSiteId = $request->cookies->get('tempSiteId');
+        }
+        return $this->render('main/demo/index.html.twig', [
+            'tempSiteId' => $tempSiteId
         ]);
     }
 }

@@ -1,5 +1,5 @@
 {% set scriptSrc= absolute_url(asset('build/socket-chat.js')) %}
-{% set script='<script data-socket-chat type="text/javascript" src="'~scriptSrc~'?id='~ app.request.cookies.get('tempSiteId') ~'"></script>' %}
+{% set script='<script data-socket-chat type="text/javascript" src="'~scriptSrc~'?id='~ tempSiteId ~'"></script>' %}
 {% set body='</body>' %}
 <ol>
     <li>{{ 'config.demo.developper.insert'|trans }}

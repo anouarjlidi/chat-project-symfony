@@ -11,11 +11,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ConfigController extends AbstractController
 {
     /**
-     * @Route("/demo", name="demo")
+     * @Route("/dashboard", name="dashboard")
      */
     public function index()
     {
-        return $this->render('config/demo/index.html.twig', [
+        return $this->render('config/index.html.twig', [
         ]);
     }
 }
