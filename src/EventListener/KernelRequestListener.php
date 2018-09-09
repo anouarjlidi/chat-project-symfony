@@ -49,7 +49,7 @@ class KernelRequestListener
         if (!empty($this->sam->getToken())) {
             $this->user = $this->sam->getToken()->getUser();
         }
-        if (!$this->user instanceof User) {
+        if (!$this->user instanceof User AND strpos($route, "api_") !== 0) {
             $this->createTempUser($event);
             $this->createWebSite($event);
         }
@@ -64,7 +64,7 @@ class KernelRequestListener
         if (!($event->isMasterRequest() AND '_wdt' !== $route)) {
             return;
         }
-        if (!$this->user instanceof User) {
+        if (!$this->user instanceof User AND strpos($route, "api_") !== 0) {
             $this->createCookie($event);
         }
     }
@@ -117,7 +117,7 @@ class KernelRequestListener
             if (empty($webSites)) {
                 $webSite = new WebSite();
                 $webSite->setHasAdminChat(false);
-                $webSite->setHasPrivateChat(false);
+                $webSite->setHasPrivateChat(null);
                 $webSite->setAdminTempUser($this->tempUserId);
                 $this->em->persist($webSite);
                 $this->em->flush();

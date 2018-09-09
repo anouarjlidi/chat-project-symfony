@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Traits\PublicableTrait;
 use App\Traits\SoftdeleteableTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,6 +15,7 @@ class WebSite
 {
     use TimestampableTrait;
     use SoftdeleteableTrait;
+    use PublicableTrait;
 
     /**
      * @ORM\Id()
@@ -33,12 +35,12 @@ class WebSite
     private $isOnline;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $hasAdminChat;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $hasPrivateChat;
 
@@ -68,12 +70,18 @@ class WebSite
     private $adminTempUser;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $installed;
+
+    /**
      * WebSite constructor.
      */
     public function __construct()
     {
         $this->chatRooms = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->installed = false;
     }
 
     /**
@@ -131,10 +139,10 @@ class WebSite
     }
 
     /**
-     * @param bool $hasAdminChat
+     * @param bool|null $hasAdminChat
      * @return WebSite
      */
-    public function setHasAdminChat(bool $hasAdminChat): self
+    public function setHasAdminChat(?bool $hasAdminChat): self
     {
         $this->hasAdminChat = $hasAdminChat;
 
@@ -150,10 +158,10 @@ class WebSite
     }
 
     /**
-     * @param bool $hasPrivateChat
+     * @param bool|null $hasPrivateChat
      * @return WebSite
      */
-    public function setHasPrivateChat(bool $hasPrivateChat): self
+    public function setHasPrivateChat(?bool $hasPrivateChat): self
     {
         $this->hasPrivateChat = $hasPrivateChat;
 
@@ -259,5 +267,21 @@ class WebSite
     public function setAdminTempUser($adminTempUser): void
     {
         $this->adminTempUser = $adminTempUser;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInstalled()
+    {
+        return $this->installed;
+    }
+
+    /**
+     * @param mixed $installed
+     */
+    public function setInstalled($installed): void
+    {
+        $this->installed = $installed;
     }
 }
