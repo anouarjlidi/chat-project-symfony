@@ -1,6 +1,7 @@
-const apiUrl = 'http://chatsymfony/api/request';
+const apiUrl = 'http://chatsymfony/api';
 const socketScript = 'http://localhost:3000/socket.io/socket.io.js';
 const socketServer = 'http://localhost:3000/';
+let thisScriptSrc = '';
 
 function getAllUrlParams(url) {
     let queryString = url ? url.split('?')[1] : window.location.search.slice(1);
@@ -45,7 +46,7 @@ function sendWebsiteData(urlParams) {
     return new Promise(function (resolve, reject) {
         const xhr = new XMLHttpRequest();
         const params = 'site_id=' + urlParams["id"];
-        xhr.open('POST', apiUrl, true);
+        xhr.open('POST', apiUrl + '/request', true);
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.send(params);
         xhr.onreadystatechange = function () {
@@ -82,10 +83,33 @@ function loadScript(url, callback) {
     document.getElementsByTagName("head")[0].appendChild(script);
 }
 
+function installWebSite(site) {
+    const xhr = new XMLHttpRequest();
+    const source_code = String(document.documentElement.outerHTML);
+    console.log(window.location.href);
+    const params = 'site_id=' + site.id + '&source_code=' + source_code + '&url=' + window.location.href + '&thisScriptSrc=' + thisScriptSrc;
+    xhr.open('POST', apiUrl + '/install', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.send(params);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const resp = xhr.responseText;
+            } else {
+                const status = xhr.status;
+            }
+        }
+    }
+}
+
 function getSocketScript(responseData) {
     loadScript(socketScript, function () {
         loadSocket(responseData);
     });
+    const site = responseData.site;
+    if (site.isOnline !== true || site.installed === false) {
+        installWebSite(site);
+    }
 }
 
 function errorHandler(statusCode) {
@@ -109,6 +133,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     } else {
         scripts.forEach(function (element) {
             const url = element.getAttribute("src");
+            thisScriptSrc = url;
             urlParams = getAllUrlParams(url);
         });
         sendWebsiteData(urlParams).then(getSocketScript, errorHandler);

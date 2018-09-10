@@ -75,6 +75,11 @@ class WebSite
     private $installed;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $sourceCode;
+
+    /**
      * WebSite constructor.
      */
     public function __construct()
@@ -283,5 +288,21 @@ class WebSite
     public function setInstalled($installed): void
     {
         $this->installed = $installed;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
+    }
+
+    /**
+     * @param mixed $sourceCode
+     */
+    public function setSourceCode($sourceCode): void
+    {
+        $this->sourceCode = $sourceCode;
     }
 }

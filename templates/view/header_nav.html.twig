@@ -18,7 +18,9 @@
             </li>
         </ul>
         <ul class="navbar-nav mx-auto">
-            <li class="nav-item"><a class="nav-link" href="#">{{ 'navbar.try.now'|trans }}</a></li>
+            <li class="nav-item {% if route == 'try_it_now' %}active{% endif %}">
+                <a class="nav-link" href="{{ path('try_it_now') }}">{{ 'navbar.try.now'|trans }}</a>
+            </li>
         </ul>
         <ul class="navbar-nav ml-right">
             <li class="nav-item {% if route == 'config' %}active{% endif %}">

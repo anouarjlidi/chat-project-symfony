@@ -53,4 +53,20 @@ class MainController extends AbstractController
             'tempSiteId' => $tempSiteId
         ]);
     }
+
+    /**
+     * @Route("/try-it-now", name="try_it_now")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function tryItNow(Request $request)
+    {
+        $tempSiteId = $request->attributes->get('tempSiteId');
+        if (empty($tempSiteId)) {
+            $tempSiteId = $request->cookies->get('tempSiteId');
+        }
+        return $this->render('main/demo/index.html.twig', [
+            'tempSiteId' => $tempSiteId
+        ]);
+    }
 }
