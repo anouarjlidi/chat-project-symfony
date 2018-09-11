@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\WebSite;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -59,19 +60,7 @@ class KernelRequestListener
         }
         $request = $event->getRequest();
         if ($request->isMethod('POST')) {
-//            check for flash message after redirection
-            $messagesAfterRedirect = $request->request->get('messagesAfterRedirect');
-            if ($messagesAfterRedirect != null AND is_array($messagesAfterRedirect) AND sizeof($messagesAfterRedirect) > 0) {
-                foreach ($messagesAfterRedirect as $message) {
-                    $this->session->getFlashBag()->add(
-                        $message["class"],
-                        [
-                            "title" => $message["title"],
-                            "message" => $message["message"],
-                        ]
-                    );
-                }
-            }
+            $this->addFlashMessagesAfterRedirect($request);
         }
     }
 
@@ -146,6 +135,25 @@ class KernelRequestListener
             } else {
                 $this->tempSiteId = $webSites[0]->getId();
                 $request->attributes->set('tempSiteId', $this->tempSiteId);
+            }
+        }
+    }
+
+    /**
+     * @param Request $request
+     */
+    private function addFlashMessagesAfterRedirect(Request $request)
+    {
+        $messagesAfterRedirect = $request->request->get('messagesAfterRedirect');
+        if ($messagesAfterRedirect != null AND is_array($messagesAfterRedirect) AND sizeof($messagesAfterRedirect) > 0) {
+            foreach ($messagesAfterRedirect as $message) {
+                $this->session->getFlashBag()->add(
+                    $message["class"],
+                    [
+                        "title" => $message["title"],
+                        "message" => $message["message"],
+                    ]
+                );
             }
         }
     }
