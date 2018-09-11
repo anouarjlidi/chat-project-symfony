@@ -35,7 +35,7 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * @Route("/access-dashboard", name="access_dashboard")
+     * @Route("/access-dashboard", name="ajax_access_dashboard")
      * @param Request $request
      * @param TokenStorageInterface $tokenStorage
      * @param TranslatorInterface $translator
