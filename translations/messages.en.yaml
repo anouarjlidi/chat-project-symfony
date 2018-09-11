@@ -7,18 +7,26 @@ navbar:
     pricing: 'Pricing'
     try.now: 'Try it now !'
 
-config:
-      demo:
-          developper:
-              insert: 'Please insert this script'
-              all_page: 'on all your page just before the tag'
-              open_page: 'Open the home page of your website or anypage (nothing will happen to your website)'
-              back_start: 'Then come back here, and click on Start ! (nothing will happen to your website)'
+demo:
+    developper:
+        insert: 'Please insert this script'
+        all_page: 'on all your page just before the tag'
+        open_page: 'Open the home page of your website or anypage (nothing will happen to your website)'
+        back_start: 'Then come back here, and click on Start ! (nothing will happen to your website)'
+        not_installed: 'It seems that you didn''t install the script'
+
+dashboard:
+    configure: 'You can now configure your WebSite !'
+
+sentence:
+    redirect: 'You will be redirect ...'
 
 word:
     wordpress: 'Wordpress'
     developper: 'Developper'
     start: 'Start'
+    success: 'Success'
+    error: 'Error'
 
 lang:
     fr: 'French'

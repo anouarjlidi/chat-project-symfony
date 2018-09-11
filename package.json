@@ -17,6 +17,7 @@
         "build": "encore production"
     },
     "dependencies": {
-        "flag-icon-css": "^3.0.0"
+        "flag-icon-css": "^3.0.0",
+        "jquery.redirect": "^1.1.4"
     }
 }

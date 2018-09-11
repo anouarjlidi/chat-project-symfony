@@ -6,30 +6,34 @@ use App\Entity\User;
 use App\Entity\WebSite;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class KernelRequestListener
 {
-    private $sam;
+    private $tokenStorage;
     private $timeCookieTempUser;
     private $em;
+    private $session;
     private $user;
     private $tempUserId;
     private $tempSiteId;
 
     /**
      * KernelRequestListener constructor.
-     * @param TokenStorage $sam
+     * @param TokenStorage $tokenStorage
      * @param int $timeCookieTempUser
      * @param EntityManager $em
+     * @param Session $session
      */
-    public function __construct(TokenStorage $sam, int $timeCookieTempUser, EntityManager $em)
+    public function __construct(TokenStorage $tokenStorage, int $timeCookieTempUser, EntityManager $em, Session $session)
     {
-        $this->sam = $sam;
+        $this->tokenStorage = $tokenStorage;
         $this->timeCookieTempUser = $timeCookieTempUser;
         $this->em = $em;
+        $this->session = $session;
         $this->user = null;
         $this->tempUserId = null;
         $this->tempSiteId = null;
@@ -46,12 +50,28 @@ class KernelRequestListener
         if (!($event->isMasterRequest() AND '_wdt' !== $route)) {
             return;
         }
-        if (!empty($this->sam->getToken())) {
-            $this->user = $this->sam->getToken()->getUser();
+        if (!empty($this->tokenStorage->getToken())) {
+            $this->user = $this->tokenStorage->getToken()->getUser();
         }
         if (!$this->user instanceof User AND strpos($route, "api_") !== 0) {
             $this->createTempUser($event);
             $this->createWebSite($event);
+        }
+        $request = $event->getRequest();
+        if ($request->isMethod('POST')) {
+//            check for flash message after redirection
+            $messagesAfterRedirect = $request->request->get('messagesAfterRedirect');
+            if ($messagesAfterRedirect != null AND is_array($messagesAfterRedirect) AND sizeof($messagesAfterRedirect) > 0) {
+                foreach ($messagesAfterRedirect as $message) {
+                    $this->session->getFlashBag()->add(
+                        $message["class"],
+                        [
+                            "title" => $message["title"],
+                            "message" => $message["message"],
+                        ]
+                    );
+                }
+            }
         }
     }
 

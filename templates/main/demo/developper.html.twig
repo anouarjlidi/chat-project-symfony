@@ -2,13 +2,13 @@
 {% set script='<script data-socket-chat type="text/javascript" src="'~scriptSrc~'?id='~ tempSiteId ~'"></script>' %}
 {% set body='</body>' %}
 <ol>
-    <li>{{ 'config.demo.developper.insert'|trans }}
+    <li>{{ 'demo.developper.insert'|trans }}
         <br><code>{{ script }}</code><br>
-        {{ 'config.demo.developper.all_page'|trans }}
+        {{ 'demo.developper.all_page'|trans }}
         <code>{{ body }}</code>
     </li>
-    <li>{{ 'config.demo.developper.open_page'|trans }}</li>
-    <li>{{ 'config.demo.developper.back_start'|trans }}</li>
+    <li>{{ 'demo.developper.open_page'|trans }}</li>
+    <li>{{ 'demo.developper.back_start'|trans }}</li>
 </ol>
 <div id="accordion-developper">
 
@@ -43,4 +43,6 @@
         </div>
     </div>
 </div>
-<button type="button" class="btn btn-primary btn-lg btn-block">{{ 'word.start'|trans }} !</button>
+<button type="button" data-ajax-call="{{ path('access_dashboard') }}" data-ajax-href="{{ path('dashboard') }}"
+        class="btn btn-primary btn-lg btn-block">{{ 'word.start'|trans }} !
+</button>

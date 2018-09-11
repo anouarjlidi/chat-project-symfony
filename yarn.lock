@@ -2822,6 +2822,10 @@ isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
 
+jquery.redirect@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/jquery.redirect/-/jquery.redirect-1.1.4.tgz#3fc6e1e842f19312e47415012065a08d97f71b24"
+
 jquery@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"

@@ -67,9 +67,9 @@ class ApiController extends AbstractController
                     if (($urlParse["scheme"] == 'http' OR $urlParse["scheme"] == 'https') AND isset($urlParse["host"])) {
                         $url = $urlParse["scheme"] . "://" . $urlParse["host"] . "/";
                     }
-                    $webSite->setUrl($url);
                     $source_code = $isOnline;
                 }
+                $webSite->setUrl($url);
                 $webSite->setSourceCode($source_code);
                 $em->persist($webSite);
                 $em->flush();

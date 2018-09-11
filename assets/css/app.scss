@@ -6,6 +6,20 @@ div.dropdown-item {
   cursor: pointer;
 }
 
+#flash-messages {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  width: 50%;
+}
+
+#flash-messages div.alert {
+  display: none;
+}
+
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";
 @import "~flag-icon-css/sass/flag-icon";
+@import "main/loader";
