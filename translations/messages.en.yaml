@@ -27,6 +27,7 @@ word:
     start: 'Start'
     success: 'Success'
     error: 'Error'
+    dashboard: 'Dashboard'
 
 lang:
     fr: 'French'

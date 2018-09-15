@@ -27,6 +27,7 @@ word:
     start: 'Commencer'
     success: 'Succès'
     error: 'Erreur'
+    dashboard: 'Tableau de bord'
 
 lang:
     fr: 'Français'

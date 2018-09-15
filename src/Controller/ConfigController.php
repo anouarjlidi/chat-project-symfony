@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\WebSite;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\WebSite as WebSiteService;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -12,10 +14,29 @@ class ConfigController extends AbstractController
 {
     /**
      * @Route("/dashboard", name="dashboard")
+     * @param WebSiteService $webSiteService
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index()
+    public function dashboard(WebSiteService $webSiteService)
     {
-        return $this->render('config/index.html.twig', [
+        $webSites = $webSiteService->getWebSitesOfCurrentUser();
+        return $this->render('config/content/main.html.twig', [
+            "webSites" => $webSites
+        ]);
+    }
+
+    /**
+     * @Route("/dashboard/edit/website/{id}", name="edit_website")
+     * @param WebSite $website
+     * @param WebSiteService $webSiteService
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function edit(WebSite $website, WebSiteService $webSiteService)
+    {
+        $webSites = $webSiteService->getWebSitesOfCurrentUser();
+        return $this->render('config/content/edit.html.twig', [
+            "webSites" => $webSites,
+            "currentWebSite" => $website
         ]);
     }
 }

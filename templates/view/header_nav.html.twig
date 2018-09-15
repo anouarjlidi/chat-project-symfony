@@ -26,13 +26,21 @@
             <li class="nav-item {% if route == 'config' %}active{% endif %}">
                 <a class="nav-link" href="{{ path('demo') }}">{{ 'navbar.demo'|trans }}</a>
             </li>
-            <li class="nav-item {% if route == 'fos_user_security_login' %}active{% endif %}">
-                <a class="nav-link" href="{{ path('fos_user_security_login') }}">{{ 'navbar.login'|trans }}</a>
-            </li>
-            <li class="nav-item {% if route == 'fos_user_registration_register' %}active{% endif %}">
-                <a class="nav-link"
-                   href="{{ path('fos_user_registration_register') }}">{{ 'navbar.register'|trans }}</a>
-            </li>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('fos_user_security_logout') }}">
+                        {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                    </a>
+                </li>
+            {% else %}
+                <li class="nav-item {% if route == 'fos_user_security_login' %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('fos_user_security_login') }}">{{ 'navbar.login'|trans }}</a>
+                </li>
+                <li class="nav-item {% if route == 'fos_user_registration_register' %}active{% endif %}">
+                    <a class="nav-link"
+                       href="{{ path('fos_user_registration_register') }}">{{ 'navbar.register'|trans }}</a>
+                </li>
+            {% endif %}
             <li class="nav-item">
                 <div class="dropdown" id="selectLocale">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
@@ -40,7 +48,8 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
                         {% for locale in available_locale %}
-                            <div data-value="{{ locale }}" data-href="{{ path(route, { _locale: locale }) }}"
+                            <div data-value="{{ locale }}"
+                                 data-href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_locale': locale})) }}"
                                  class="dropdown-item {% if locale == app.request.getLocale() %}active{% endif %}">
                                 {% set lang = 'lang.'~locale %}
                                 <span class="flag-icon flag-icon-{{ locale }}"></span>{{ lang|trans }}

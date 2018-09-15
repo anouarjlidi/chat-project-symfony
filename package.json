@@ -18,6 +18,7 @@
     },
     "dependencies": {
         "flag-icon-css": "^3.0.0",
-        "jquery.redirect": "^1.1.4"
+        "jquery.redirect": "^1.1.4",
+        "startbootstrap-sb-admin": "^5.0.2"
     }
 }

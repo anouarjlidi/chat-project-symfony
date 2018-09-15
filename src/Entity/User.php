@@ -88,6 +88,6 @@ class User extends BaseUser
      */
     public function getWebSites()
     {
-        return $this->chatRooms;
+        return $this->webSites;
     }
 }

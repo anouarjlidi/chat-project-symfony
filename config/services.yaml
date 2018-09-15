@@ -42,3 +42,6 @@ services:
         arguments: [ '@request_stack' ]
         tags:
             - { name: doctrine.event_listener, event: postPersist }
+
+    App\Service\WebSite:
+        arguments: [ '@security.authorization_checker', '@security.token_storage', '@request_stack', '@doctrine.orm.entity_manager' ]

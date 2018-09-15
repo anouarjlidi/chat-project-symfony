@@ -30,6 +30,11 @@ class WebSite
     private $url;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isOnline;
@@ -304,5 +309,21 @@ class WebSite
     public function setSourceCode($sourceCode): void
     {
         $this->sourceCode = $sourceCode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name): void
+    {
+        $this->name = $name;
     }
 }

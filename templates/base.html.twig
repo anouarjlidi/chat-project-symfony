@@ -7,16 +7,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}Welcome!{% endblock %}</title>
     <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+    {% block stylesheets %}{% endblock %}
     {#Google localized versions#}
     {% set available_locale = available_locale|split('|') %}
     {% set route = app.request.attributes.get('_route') %}
     {% for locale in available_locale %}
-        <link rel="alternate" hreflang="{{ locale }}" href="{{ absolute_url(path(route, { _locale: locale })) }}"/>
+        <link rel="alternate" hreflang="{{ locale }}" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_locale': locale})) }}"/>
     {% endfor %}
     {#Google localized versions#}
-    {% block stylesheets %}{% endblock %}
 </head>
-<body>
+<body {% block idBody %}{% endblock %}>
 <div style="display: none" id="full-loader" class="loading">Loading&#8230;</div>
 {{ include('view/header_nav.html.twig') }}
 <div id="flash-messages">
