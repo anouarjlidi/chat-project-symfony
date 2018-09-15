@@ -25,8 +25,20 @@
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <h4 class="alert-heading">{{ message.0.title }}</h4>
-            <p>{{ message.0.message }}</p>
+            {% if message.0.title is defined %}
+                <h4 class="alert-heading">{{ message.0.title }}</h4>
+            {% endif %}
+            {% if message is iterable %}
+                {% for m in message %}
+                    {% if m is iterable %}
+                        <p>{{ m.message }}</p>
+                    {% else %}
+                        <p>{{ m }}</p>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>{{ message }}</p>
+            {% endif %}
         </div>
     {% endfor %}
 </div>

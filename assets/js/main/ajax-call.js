@@ -18,13 +18,16 @@ $("[data-ajax-call]").click(function (e) {
                 if (data.messages.length > 0) {
                     const createAlert = function () {
                         data.messages.forEach(function (message) {
-                            $("#flash-messages").append('<div class="alert alert-' + message.class + '" role="alert">\n' +
+                            let displayMessage = '<div class="alert alert-' + message.class + '" role="alert">\n' +
                                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
                                 '<span aria-hidden="true">&times;</span>\n' +
-                                '</button>\n' +
-                                '<h4 class="alert-heading">' + message.title + '</h4>\n' +
-                                '<p>' + message.message + '</p>\n' +
-                                '</div>');
+                                '</button>\n';
+                            if (message.title !== undefined && message.title !== null && message.title !== "") {
+                                displayMessage += '<h4 class="alert-heading">' + message.title + '</h4>\n';
+                            }
+                            displayMessage += '<p>' + message.message + '</p>\n' +
+                                '</div>';
+                            $("#flash-messages").append(displayMessage);
                         })
                     };
                     $.when(createAlert()).done(function () {

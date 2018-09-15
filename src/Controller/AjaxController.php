@@ -25,9 +25,6 @@ class AjaxController extends AbstractController
     public function __construct(RequestStack $requestStack)
     {
         $request = $requestStack->getMasterRequest();
-        if (!$request->isMethod('POST')) {
-            throw new AccessDeniedException("Access Denied");
-        }
         $this->redirect = $request->request->get("redirect");
         $this->messages = [];
         $this->messagesAfterRedirect = [];

@@ -6,10 +6,12 @@ use App\Entity\User;
 use App\Entity\WebSite;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class KernelRequestListener
@@ -18,6 +20,7 @@ class KernelRequestListener
     private $timeCookieTempUser;
     private $em;
     private $session;
+    private $router;
     private $user;
     private $tempUserId;
     private $tempSiteId;
@@ -28,13 +31,15 @@ class KernelRequestListener
      * @param int $timeCookieTempUser
      * @param EntityManager $em
      * @param Session $session
+     * @param RouterInterface $router
      */
-    public function __construct(TokenStorage $tokenStorage, int $timeCookieTempUser, EntityManager $em, Session $session)
+    public function __construct(TokenStorage $tokenStorage, int $timeCookieTempUser, EntityManager $em, Session $session, RouterInterface $router)
     {
         $this->tokenStorage = $tokenStorage;
         $this->timeCookieTempUser = $timeCookieTempUser;
         $this->em = $em;
         $this->session = $session;
+        $this->router = $router;
         $this->user = null;
         $this->tempUserId = null;
         $this->tempSiteId = null;
@@ -75,6 +80,39 @@ class KernelRequestListener
         }
         if (!$this->user instanceof User AND strpos($route, "api_") !== 0) {
             $this->createCookie($event);
+        }
+        $this->redirect($event, $route);
+    }
+
+    /**
+     * @param FilterResponseEvent $event
+     * @param string $route
+     */
+    private function redirect(FilterResponseEvent $event, string $route)
+    {
+        $redirectToDashBoard = ["demo", "try_it_now"];
+        $redirectToDemo = ["dashboard"];
+        if (in_array($route, $redirectToDashBoard)) {
+            $repoWebSite = $this->em->getRepository("App\Entity\WebSite");
+            if (!$this->user instanceof User) {
+                $arrayDashBoard = ["installed" => true, "adminTempUser" => $this->tempUserId];
+                $webSiteInstalled = $repoWebSite->findBy($arrayDashBoard);
+            } else {
+                $webSiteInstalled = $repoWebSite->getInstalledWebSitesForUser($this->user);
+            }
+            if (sizeof($webSiteInstalled) > 0) {
+                $event->setResponse(new RedirectResponse($this->router->generate('dashboard')));
+            }
+        }
+        if (in_array($route, $redirectToDemo)) {
+            $repoWebSite = $this->em->getRepository("App\Entity\WebSite");
+            if (!$this->user instanceof User) {
+                $arrayDashBoard = ["installed" => true, "adminTempUser" => $this->tempUserId];
+                $webSiteInstalled = $repoWebSite->findBy($arrayDashBoard);
+                if (sizeof($webSiteInstalled) == 0) {
+                    $event->setResponse(new RedirectResponse($this->router->generate('demo')));
+                }
+            }
         }
     }
 

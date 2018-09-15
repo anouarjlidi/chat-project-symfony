@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\WebSite;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -19,32 +20,13 @@ class WebSiteRepository extends ServiceEntityRepository
         parent::__construct($registry, WebSite::class);
     }
 
-//    /**
-//     * @return WebSite[] Returns an array of WebSite objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function getInstalledWebSitesForUser(User $user)
     {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('w.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $qb = $this->createQueryBuilder("w")
+            ->where(':user MEMBER OF w.users')
+            ->setParameters(array('user' => $user))
+            ->andWhere('w.installed = :val')
+            ->setParameter('val', true);
+        return $qb->getQuery()->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?WebSite
-    {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

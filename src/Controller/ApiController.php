@@ -32,11 +32,11 @@ class ApiController extends AbstractController
 
         $response->setContent(json_encode($array));
         $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-        if ($webSite->getInstalled() == true AND $webSite->getIsOnline() == true) {
+        if ($webSite->getInstalled() == true AND $webSite->getIsOnline() == true AND filter_var($webSite->getUrl(), FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
             $response->headers->set('Access-Control-Allow-Origin', $webSite->getUrl());
+        } else {
+            $response->headers->set('Access-Control-Allow-Origin', '*');
         }
-        $response->headers->set('Access-Control-Allow-Methods', 'POST');
         return $response;
     }
 

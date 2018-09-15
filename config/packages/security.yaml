@@ -29,4 +29,6 @@ security:
         - { path: ^/%available_locale%/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/%available_locale%/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/%available_locale%/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/%available_locale%/ajax, role: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
+        - { path: ^/api, role: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
         - { path: ^/%available_locale%/admin/, role: ROLE_ADMIN }
