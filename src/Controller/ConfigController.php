@@ -26,15 +26,18 @@ class ConfigController extends AbstractController
     }
 
     /**
-     * @Route("/dashboard/edit/website/{id}", name="dashboard_edit_website")
+     * @Route("/dashboard/website/{id}", name="dashboard_website")
      * @param WebSite $website
      * @param WebSiteService $webSiteService
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function edit(WebSite $website, WebSiteService $webSiteService)
+    public function website(WebSite $website, WebSiteService $webSiteService)
     {
         $webSites = $webSiteService->getWebSitesOfCurrentUser();
-        return $this->render('config/content/edit.html.twig', [
+        if (!in_array($website, $webSites)) {
+            return $this->redirectToRoute('dashboard');
+        }
+        return $this->render('config/content/website.html.twig', [
             "webSites" => $webSites,
             "currentWebSite" => $website
         ]);

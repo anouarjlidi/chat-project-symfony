@@ -326,4 +326,12 @@ class WebSite
     {
         $this->name = $name;
     }
+
+    public function __toString()
+    {
+        if ($this->name == null OR $this->name == "") {
+            return $this->url;
+        }
+        return $this->name;
+    }
 }
