@@ -91,7 +91,7 @@ class KernelRequestListener
     private function redirect(FilterResponseEvent $event, string $route)
     {
         $redirectToDashBoard = ["demo", "try_it_now"];
-        $redirectToDemo = ["dashboard"];
+        $redirectToDemo = "dashboard";
         if (in_array($route, $redirectToDashBoard)) {
             $repoWebSite = $this->em->getRepository("App\Entity\WebSite");
             if (!$this->user instanceof User) {
@@ -104,7 +104,7 @@ class KernelRequestListener
                 $event->setResponse(new RedirectResponse($this->router->generate('dashboard')));
             }
         }
-        if (in_array($route, $redirectToDemo)) {
+        if (strpos($route, $redirectToDemo) !== false) {
             $repoWebSite = $this->em->getRepository("App\Entity\WebSite");
             if (!$this->user instanceof User) {
                 $arrayDashBoard = ["installed" => true, "adminTempUser" => $this->tempUserId];

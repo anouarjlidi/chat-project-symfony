@@ -26,7 +26,7 @@ class ConfigController extends AbstractController
     }
 
     /**
-     * @Route("/dashboard/edit/website/{id}", name="edit_website")
+     * @Route("/dashboard/edit/website/{id}", name="dashboard_edit_website")
      * @param WebSite $website
      * @param WebSiteService $webSiteService
      * @return \Symfony\Component\HttpFoundation\Response

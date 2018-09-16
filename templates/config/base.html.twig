@@ -30,8 +30,8 @@
                     <span>{{ "word.dashboard"|trans }}</span></a>
             </li>
             {% for webSite in webSites %}
-                <li class="nav-item {% if route == 'edit_website' and app.request.attributes.get('_route_params').id == webSite.id %}active{% endif %}">
-                    <a class="nav-link" href="{{ path('edit_website', { 'id': webSite.id }) }}">
+                <li class="nav-item {% if route == 'dashboard_edit_website' and app.request.attributes.get('_route_params').id == webSite.id %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('dashboard_edit_website', { 'id': webSite.id }) }}">
                         <i class="fas fa-fw fa-edit"></i>
                         {% if webSite.name is null or webSite.name=='' %}
                             <span>{{ webSite.url }}</span>

@@ -12,7 +12,8 @@
     {% set available_locale = available_locale|split('|') %}
     {% set route = app.request.attributes.get('_route') %}
     {% for locale in available_locale %}
-        <link rel="alternate" hreflang="{{ locale }}" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_locale': locale})) }}"/>
+        <link rel="alternate" hreflang="{{ locale }}"
+              href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_locale': locale})) }}"/>
     {% endfor %}
     {#Google localized versions#}
 </head>
