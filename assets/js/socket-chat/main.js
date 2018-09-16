@@ -2,6 +2,8 @@ const apiUrl = 'http://chatsymfony/api';
 const socketScript = 'http://localhost:3000/socket.io/socket.io.js';
 const socketServer = 'http://localhost:3000/';
 let thisScriptSrc = '';
+let urlParams = {};
+let userid = null;
 
 function getAllUrlParams(url) {
     let queryString = url ? url.split('?')[1] : window.location.search.slice(1);
@@ -86,7 +88,6 @@ function loadScript(url, callback) {
 function installWebSite(site) {
     const xhr = new XMLHttpRequest();
     const source_code = String(document.documentElement.outerHTML);
-    console.log(window.location.href);
     const params = 'site_id=' + site.id + '&source_code=' + source_code + '&url=' + window.location.href + '&thisScriptSrc=' + thisScriptSrc;
     xhr.open('POST', apiUrl + '/install', true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -117,17 +118,51 @@ function errorHandler(statusCode) {
 }
 
 function loadSocket(responseData) {
-    const socket = io(socketServer);
     const site = responseData.site;
+    let inAdminPanel = false;
     console.log(site);
+    console.log(urlParams);
+    if (urlParams.adminpanel !== undefined && urlParams.adminpanel === "1") {
+        inAdminPanel = true;
+    }
     $(function () {
+        if (site.hasAdminChat === true || (site.hasAdminChat === false && inAdminPanel === true)) {
+            //display admin chat
+            if (urlParams.userid !== undefined || urlParams.userid !== "") {
+                userid = null;
+            } else {
+                userid = urlParams.userid;
+            }
+            displayAdminChatRoom(userid, site, function () {
+                // const socket = io(socketServer);
+            });
+        }
 
+        function displayAdminChatRoom(userid, site, callback) {
+            const xhr = new XMLHttpRequest();
+            const params = 'site_id=' + site.id + '&user_id=' + userid;
+            xhr.open('POST', apiUrl + '/get-admin-chat-room', true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.send(params);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        const resp = xhr.responseText;
+                        const respJson = JSON.parse(resp);
+                        const adminChat = respJson.adminChatRoom;
+                        console.log(adminChat);
+                        document.body.insertAdjacentHTML('beforeend', site.templateAdminChat);
+                        document.body.insertAdjacentHTML('beforeend', site.cssAdminChat);
+                        callback();
+                    }
+                }
+            };
+        }
     });
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
     const scripts = document.querySelectorAll('[data-socket-chat]');
-    let urlParams = {};
     if (scripts.length !== 1) {
         invalidNumberOfScripts();
     } else {

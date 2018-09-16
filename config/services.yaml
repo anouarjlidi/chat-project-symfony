@@ -39,7 +39,7 @@ services:
             - { name: kernel.event_listener, event: kernel.response }
 
     App\EventListener\DoctrineListener:
-        arguments: [ '@request_stack' ]
+        arguments: [ '@request_stack', '@App\Service\WebSiteView' ]
         tags:
             - { name: doctrine.event_listener, event: postPersist }
 

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\ChatRoom;
 use App\Entity\WebSite;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,11 +33,11 @@ class ApiController extends AbstractController
 
         $response->setContent(json_encode($array));
         $response->headers->set('Content-Type', 'application/json');
-        if ($webSite->getInstalled() == true AND $webSite->getIsOnline() == true AND filter_var($webSite->getUrl(), FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
-            $response->headers->set('Access-Control-Allow-Origin', $webSite->getUrl());
-        } else {
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-        }
+//        if ($webSite->getInstalled() == true AND $webSite->getIsOnline() == true AND filter_var($webSite->getUrl(), FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
+//            $response->headers->set('Access-Control-Allow-Origin', $webSite->getUrl());
+//        } else {
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+//        }
         return $response;
     }
 
@@ -82,7 +83,36 @@ class ApiController extends AbstractController
         $response->setContent(json_encode($array));
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
-        $response->headers->set('Access-Control-Allow-Methods', 'POST');
+        return $response;
+    }
+
+    /**
+     * @Route("/get-admin-chat-room", name="api_get_admin_chat_room")
+     * @param Request $request
+     * @return Response
+     */
+    public function getAdminChatRoom(Request $request)
+    {
+        $response = new Response();
+        $site_id = $request->request->get('site_id');
+        $user_id = $request->request->get('user_id');
+        $array = [];
+        if ($user_id == "null") {
+            $adminChatRoom = new ChatRoom();
+            $adminChatRoom->setChatType("admin");
+            $array = [
+                'adminChatRoom' => $adminChatRoom->getPublicObject()
+            ];
+        } else {
+            //get the chat room in bdd if not exist, create it et flush it
+        }
+        $response->setContent(json_encode($array));
+        $response->headers->set('Content-Type', 'application/json');
+//        if ($webSite->getInstalled() == true AND $webSite->getIsOnline() == true AND filter_var($webSite->getUrl(), FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
+//            $response->headers->set('Access-Control-Allow-Origin', $webSite->getUrl());
+//        } else {
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+//        }
         return $response;
     }
 }

@@ -46,4 +46,31 @@ class WebSite
         }
         return $webSites;
     }
+
+    public function getDefaultCssAdminChat()
+    {
+        ob_start();
+        ?>
+        <style>
+            #admin_chat {
+                background-color: red;
+            }
+        </style>
+        <?php
+        $data = ob_get_contents();
+        ob_end_clean();
+        return $data;
+    }
+
+    public function getDefaultTemplateAdminChat()
+    {
+        ob_start(); ?>
+        <div id="admin_chat">
+            default template
+        </div>
+        <?php
+        $data = ob_get_contents();
+        ob_end_clean();
+        return $data;
+    }
 }

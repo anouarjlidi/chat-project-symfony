@@ -85,6 +85,16 @@ class WebSite
     private $sourceCode;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $cssAdminChat;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $templateAdminChat;
+
+    /**
      * WebSite constructor.
      */
     public function __construct()
@@ -92,6 +102,8 @@ class WebSite
         $this->chatRooms = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->installed = false;
+        $this->cssAdminChat = "";
+        $this->templateAdminChat = "";
     }
 
     /**
@@ -333,5 +345,37 @@ class WebSite
             return $this->url;
         }
         return $this->name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCssAdminChat()
+    {
+        return $this->cssAdminChat;
+    }
+
+    /**
+     * @param mixed $cssAdminChat
+     */
+    public function setCssAdminChat($cssAdminChat): void
+    {
+        $this->cssAdminChat = $cssAdminChat;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTemplateAdminChat()
+    {
+        return $this->templateAdminChat;
+    }
+
+    /**
+     * @param mixed $templateAdminChat
+     */
+    public function setTemplateAdminChat($templateAdminChat): void
+    {
+        $this->templateAdminChat = $templateAdminChat;
     }
 }

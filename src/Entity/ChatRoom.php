@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Traits\PublicableTrait;
 use App\Traits\SoftdeleteableTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,6 +14,7 @@ class ChatRoom
 {
     use TimestampableTrait;
     use SoftdeleteableTrait;
+    use PublicableTrait;
 
     /**
      * @ORM\Id()

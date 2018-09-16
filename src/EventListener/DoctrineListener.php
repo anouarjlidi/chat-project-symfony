@@ -3,21 +3,26 @@
 namespace App\EventListener;
 
 use App\Entity\User;
+use App\Entity\WebSite;
+use App\Service\WebSiteView as WebSiteViewService;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class DoctrineListener
 {
     private $request;
+    private $webSiteViewService;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, WebSiteViewService $webSiteViewService)
     {
         $this->request = $requestStack->getMasterRequest();
+        $this->webSiteViewService = $webSiteViewService;
     }
 
     /**
      * @param LifecycleEventArgs $event
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function postPersist(LifecycleEventArgs $event)
     {
@@ -29,12 +34,30 @@ class DoctrineListener
         if ($entity instanceof User) {
             $this->addTempWebSite($entity, $event);
         }
+        if ($entity instanceof WebSite) {
+            $this->setDefaultValueWebSite($entity, $event);
+        }
+    }
+
+    /**
+     * @param WebSite $webSite
+     * @param LifecycleEventArgs $event
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    private function setDefaultValueWebSite(WebSite $webSite, LifecycleEventArgs $event)
+    {
+        $em = $event->getEntityManager();
+        $webSite = $this->webSiteViewService->configureDefaultValueWebSite($webSite);
+        $em->persist($webSite);
+        $em->flush();
     }
 
     /**
      * @param User $user
      * @param LifecycleEventArgs $event
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function addTempWebSite(User $user, LifecycleEventArgs $event)
     {
@@ -43,10 +66,12 @@ class DoctrineListener
         $webSitesRepo = $em->getRepository("App\Entity\WebSite");
         $webSites = $webSitesRepo->findBy(["adminTempUser" => $tempUserId]);
         foreach ($webSites as $webSite) {
-            $user->addWebSite($webSite);
-            $user->setLocale($this->request->getLocale());
-            if ($webSite->getAdminUser() == null) {
-                $webSite->setAdminUser($user);
+            if ($webSite instanceof WebSite) {
+                $user->addWebSite($webSite);
+                $user->setLocale($this->request->getLocale());
+                if ($webSite->getAdminUser() == null) {
+                    $webSite->setAdminUser($user);
+                }
             }
         }
         $em->persist($user);
