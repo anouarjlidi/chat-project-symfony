@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\ChatRoom;
+use App\Entity\ForeignUserWebSite;
 use App\Entity\WebSite;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,15 +97,38 @@ class ApiController extends AbstractController
         $response = new Response();
         $site_id = $request->request->get('site_id');
         $user_id = $request->request->get('user_id');
-        $array = [];
+        $em = $this->getDoctrine()->getManager();
+        $webSite = $em->getRepository("App\Entity\WebSite")->find($site_id);
         if ($user_id == "null") {
             $adminChatRoom = new ChatRoom();
             $adminChatRoom->setChatType("admin");
+            $adminChatRoom->setWebSite($webSite);
+            $em->persist($adminChatRoom);
+            $em->flush();
             $array = [
                 'adminChatRoom' => $adminChatRoom->getPublicObject()
             ];
         } else {
             //get the chat room in bdd if not exist, create it et flush it
+            $adminChatRoom = $em->getRepository("App\Entity\ChatRoom")->findOneBy([
+                "userWebSiteForAdminUserId" => $user_id,
+                "webSite" => $site_id,
+                "chatType" => "admin"
+            ]);
+            if (!$adminChatRoom instanceof ChatRoom) {
+                $adminChatRoom = new ChatRoom();
+                $adminChatRoom->setChatType("admin");
+                $adminChatRoom->setWebSite($webSite);
+                $foreignUserWebSite = new ForeignUserWebSite();
+                $foreignUserWebSite->setUserId($user_id);
+                $adminChatRoom->setUserWebSiteForAdmin($foreignUserWebSite);
+                $adminChatRoom->setUserWebSiteForAdminUserId($foreignUserWebSite->getUserId());
+                $em->persist($adminChatRoom);
+                $em->flush();
+            }
+            $array = [
+                'adminChatRoom' => $adminChatRoom->getPublicObject()
+            ];
         }
         $response->setContent(json_encode($array));
         $response->headers->set('Content-Type', 'application/json');

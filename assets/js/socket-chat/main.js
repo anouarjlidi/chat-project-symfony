@@ -3,7 +3,7 @@ const socketScript = 'http://localhost:3000/socket.io/socket.io.js';
 const socketServer = 'http://localhost:3000/';
 let thisScriptSrc = '';
 let urlParams = {};
-let userid = null;
+let user_id = null;
 
 function getAllUrlParams(url) {
     let queryString = url ? url.split('?')[1] : window.location.search.slice(1);
@@ -128,19 +128,19 @@ function loadSocket(responseData) {
     $(function () {
         if (site.hasAdminChat === true || (site.hasAdminChat === false && inAdminPanel === true)) {
             //display admin chat
-            if (urlParams.userid !== undefined || urlParams.userid !== "") {
-                userid = null;
+            if (urlParams.user_id === undefined || urlParams.user_id === "") {
+                user_id = null;
             } else {
-                userid = urlParams.userid;
+                user_id = urlParams.user_id;
             }
-            displayAdminChatRoom(userid, site, function () {
+            displayAdminChatRoom(user_id, site, function () {
                 // const socket = io(socketServer);
             });
         }
 
-        function displayAdminChatRoom(userid, site, callback) {
+        function displayAdminChatRoom(user_id, site, callback) {
             const xhr = new XMLHttpRequest();
-            const params = 'site_id=' + site.id + '&user_id=' + userid;
+            const params = 'site_id=' + site.id + '&user_id=' + user_id;
             xhr.open('POST', apiUrl + '/get-admin-chat-room', true);
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.send(params);
@@ -151,8 +151,8 @@ function loadSocket(responseData) {
                         const respJson = JSON.parse(resp);
                         const adminChat = respJson.adminChatRoom;
                         console.log(adminChat);
-                        document.body.insertAdjacentHTML('beforeend', site.templateAdminChat);
-                        document.body.insertAdjacentHTML('beforeend', site.cssAdminChat);
+                        // document.body.insertAdjacentHTML('beforeend', site.templateAdminChat);
+                        // document.body.insertAdjacentHTML('beforeend', site.cssAdminChat);
                         callback();
                     }
                 }

@@ -90,6 +90,9 @@ class KernelRequestListener
      */
     private function redirect(FilterResponseEvent $event, string $route)
     {
+        if (strpos($route, "ajax_") === 0 OR strpos($route, "api_")) {
+            return;
+        }
         $redirectToDashBoard = ["demo", "try_it_now"];
         $redirectToDemo = "dashboard";
         if (in_array($route, $redirectToDashBoard)) {

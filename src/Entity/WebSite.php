@@ -55,7 +55,7 @@ class WebSite
     private $isWordpress;
 
     /**
-     * @ORM\OneToMany(targetEntity="ChatRoom", mappedBy="website", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="ChatRoom", mappedBy="webSite", cascade={"persist"})
      */
     private $chatRooms;
 
@@ -256,7 +256,7 @@ class WebSite
      */
     public function getUsers()
     {
-        return $this->chatRooms;
+        return $this->users;
     }
 
     /**

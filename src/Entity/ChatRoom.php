@@ -24,19 +24,24 @@ class ChatRoom
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=10)
      */
     private $chatType;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $needFriend;
-
-    /**
      * @ORM\ManyToOne(targetEntity="WebSite", inversedBy="chatRooms")
      */
-    private $website;
+    private $webSite;
+
+    /**
+     * @ORM\OneToOne(targetEntity="ForeignUserWebSite", cascade={"persist"})
+     */
+    private $userWebSiteForAdmin;
+
+    /**
+     * @ORM\Column(type="string", length=36, nullable=true)
+     */
+    private $userWebSiteForAdminUserId;
 
     /**
      * @return mixed
@@ -66,37 +71,50 @@ class ChatRoom
     }
 
     /**
-     * @return bool|null
-     */
-    public function getNeedFriend(): ?bool
-    {
-        return $this->needFriend;
-    }
-
-    /**
-     * @param bool|null $needFriend
-     * @return ChatRoom
-     */
-    public function setNeedFriend(?bool $needFriend): self
-    {
-        $this->needFriend = $needFriend;
-
-        return $this;
-    }
-
-    /**
      * @return mixed
      */
-    public function getWebsite()
+    public function getWebSite()
     {
-        return $this->website;
+        return $this->webSite;
     }
 
     /**
      * @param mixed $webSite
      */
-    public function setWebsite($webSite): void
+    public function setWebSite($webSite): void
     {
-        $this->website = $webSite;
+        $this->webSite = $webSite;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserWebSiteForAdmin()
+    {
+        return $this->userWebSiteForAdmin;
+    }
+
+    /**
+     * @param mixed $userWebSiteForAdmin
+     */
+    public function setUserWebSiteForAdmin($userWebSiteForAdmin): void
+    {
+        $this->userWebSiteForAdmin = $userWebSiteForAdmin;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserWebSiteForAdminUserId()
+    {
+        return $this->userWebSiteForAdminUserId;
+    }
+
+    /**
+     * @param mixed $userWebSiteForAdminUserId
+     */
+    public function setUserWebSiteForAdminUserId($userWebSiteForAdminUserId): void
+    {
+        $this->userWebSiteForAdminUserId = $userWebSiteForAdminUserId;
     }
 }
