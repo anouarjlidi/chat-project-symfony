@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Traits\PublicableTrait;
 use App\Traits\SoftdeleteableTrait;
 use App\Traits\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,14 +35,14 @@ class ChatRoom
     private $webSite;
 
     /**
-     * @ORM\OneToOne(targetEntity="ForeignUserWebSite", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="ForeignUser", inversedBy="chatRooms", cascade={"persist"})
      */
-    private $userWebSiteForAdmin;
+    private $foreignUsers;
 
-    /**
-     * @ORM\Column(type="string", length=36, nullable=true)
-     */
-    private $userWebSiteForAdminUserId;
+    public function __construct()
+    {
+        $this->foreignUsers = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -87,34 +88,28 @@ class ChatRoom
     }
 
     /**
-     * @return mixed
+     * @param ForeignUser $foreignUser
      */
-    public function getUserWebSiteForAdmin()
+    public function addForeignUsers(ForeignUser $foreignUser)
     {
-        return $this->userWebSiteForAdmin;
+        $this->foreignUsers[] = $foreignUser;
+        $foreignUser->addChatRooms($this);
     }
 
     /**
-     * @param mixed $userWebSiteForAdmin
+     * @param ForeignUser $foreignUser
      */
-    public function setUserWebSiteForAdmin($userWebSiteForAdmin): void
+    public function removeForeignUsers(ForeignUser $foreignUser)
     {
-        $this->userWebSiteForAdmin = $userWebSiteForAdmin;
+        $this->foreignUsers->removeElement($foreignUser);
+        $foreignUser->removeChatRooms(null);
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
-    public function getUserWebSiteForAdminUserId()
+    public function getForeignUsers()
     {
-        return $this->userWebSiteForAdminUserId;
-    }
-
-    /**
-     * @param mixed $userWebSiteForAdminUserId
-     */
-    public function setUserWebSiteForAdminUserId($userWebSiteForAdminUserId): void
-    {
-        $this->userWebSiteForAdminUserId = $userWebSiteForAdminUserId;
+        return $this->foreignUsers;
     }
 }

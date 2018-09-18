@@ -19,32 +19,19 @@ class ChatRoomRepository extends ServiceEntityRepository
         parent::__construct($registry, ChatRoom::class);
     }
 
-//    /**
-//     * @return ChatRoom[] Returns an array of ChatRoom objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function getChatRoomWithUsers(string $chatType, array $foreignUserIds)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $qb = $this->createQueryBuilder('ch');
+        $qb
+            ->where('ch.chatType = :chatType')
+            ->setParameter('chatType', $chatType)
+            ->where(':foreignUser MEMBER OF ch.foreignUsers')
+            ->setParameters(array('foreignUser' => $foreignUserIds))
+            ->setMaxResults(1);
+        $chatRoom = $qb->getQuery()->getResult();
+        if (is_array($chatRoom) AND sizeof($chatRoom) == 1) {
+            $chatRoom = $chatRoom[0];
+        }
+        return $chatRoom;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?ChatRoom
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

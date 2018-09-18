@@ -81,7 +81,7 @@ class KernelRequestListener
         if (!$this->user instanceof User AND strpos($route, "api_") !== 0) {
             $this->createCookie($event);
         }
-        $this->redirect($event, $route);
+        if ($route != null) $this->redirect($event, $route);
     }
 
     /**

@@ -49,6 +49,9 @@ class AjaxController extends AbstractController
         } else {
             $webSites = $user->getWebSites();
         }
+        if (sizeof($webSites) == 0) {
+            //error reset les cookie
+        }
         foreach ($webSites as $webSite) {
             if ($webSite->getInstalled() == true) {
 //                array_push($this->messages, [

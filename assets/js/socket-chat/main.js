@@ -126,6 +126,7 @@ function loadSocket(responseData) {
         inAdminPanel = true;
     }
     $(function () {
+        //commencer par afficher les public chat rooms
         if (site.hasAdminChat === true || (site.hasAdminChat === false && inAdminPanel === true)) {
             //display admin chat
             if (urlParams.user_id === undefined || urlParams.user_id === "") {
@@ -140,8 +141,8 @@ function loadSocket(responseData) {
 
         function displayAdminChatRoom(user_id, site, callback) {
             const xhr = new XMLHttpRequest();
-            const params = 'site_id=' + site.id + '&user_id=' + user_id;
-            xhr.open('POST', apiUrl + '/get-admin-chat-room', true);
+            const params = 'site_id=' + site.id + '&user_id=' + user_id + '&chat_type=admin';
+            xhr.open('POST', apiUrl + '/get-chat-room', true);
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.send(params);
             xhr.onreadystatechange = function () {

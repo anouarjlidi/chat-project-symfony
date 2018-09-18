@@ -95,12 +95,18 @@ class WebSite
     private $templateAdminChat;
 
     /**
+     * @ORM\OneToMany(targetEntity="ForeignUser", mappedBy="webSite")
+     */
+    private $foreignUsers;
+
+    /**
      * WebSite constructor.
      */
     public function __construct()
     {
         $this->chatRooms = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->foreignUsers = new ArrayCollection();
         $this->installed = false;
         $this->cssAdminChat = "";
         $this->templateAdminChat = "";
@@ -257,6 +263,32 @@ class WebSite
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * @param ForeignUser $foreignUser
+     */
+    public function addForeignUsers(ForeignUser $foreignUser)
+    {
+        $this->foreignUsers[] = $foreignUser;
+        $foreignUser->setWebSite($this);
+    }
+
+    /**
+     * @param ForeignUser $foreignUser
+     */
+    public function removeForeignUsers(ForeignUser $foreignUser)
+    {
+        $this->foreignUsers->removeElement($foreignUser);
+        $foreignUser->setWebSite(null);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getForeignUsers()
+    {
+        return $this->foreignUsers;
     }
 
     /**
