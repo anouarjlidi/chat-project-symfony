@@ -21,9 +21,14 @@ class ForeignUser
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=36)
+     * @ORM\Column(type="string", length=36, nullable=true)
      */
     private $userId;
+
+    /**
+     * @ORM\Column(type="string", length=36, nullable=true)
+     */
+    private $tempId;
 
     /**
      * @ORM\Column(type="string", length=36, nullable=true)
@@ -128,5 +133,21 @@ class ForeignUser
     public function setWebSite($webSite): void
     {
         $this->webSite = $webSite;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTempId()
+    {
+        return $this->tempId;
+    }
+
+    /**
+     * @param mixed $tempId
+     */
+    public function setTempId($tempId): void
+    {
+        $this->tempId = $tempId;
     }
 }

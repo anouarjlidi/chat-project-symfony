@@ -49,23 +49,23 @@ class MainController extends AbstractController
         if (empty($tempSiteId)) {
             $tempSiteId = $request->cookies->get('tempSiteId');
         }
-        return $this->render('main/demo/index.html.twig', [
+        return $this->render('main/demo.html.twig', [
             'tempSiteId' => $tempSiteId
         ]);
     }
 
     /**
-     * @Route("/try-it-now", name="try_it_now")
+     * @Route("/get-started", name="get_started")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function tryItNow(Request $request)
+    public function getStarted(Request $request)
     {
         $tempSiteId = $request->attributes->get('tempSiteId');
         if (empty($tempSiteId)) {
             $tempSiteId = $request->cookies->get('tempSiteId');
         }
-        return $this->render('main/demo/index.html.twig', [
+        return $this->render('main/get-started/index.html.twig', [
             'tempSiteId' => $tempSiteId
         ]);
     }

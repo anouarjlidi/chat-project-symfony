@@ -19,14 +19,16 @@ class ChatRoomRepository extends ServiceEntityRepository
         parent::__construct($registry, ChatRoom::class);
     }
 
-    public function getChatRoomWithUsers(string $chatType, array $foreignUserIds)
+    public function getChatRoomWithForeignUsers(string $chatType, array $foreignUserIds, string $siteId)
     {
         $qb = $this->createQueryBuilder('ch');
         $qb
-            ->where('ch.chatType = :chatType')
-            ->setParameter('chatType', $chatType)
             ->where(':foreignUser MEMBER OF ch.foreignUsers')
             ->setParameters(array('foreignUser' => $foreignUserIds))
+            ->andWhere('ch.webSite = :siteId')
+            ->setParameter('siteId', $siteId)
+            ->andWhere('ch.chatType = :chatType')
+            ->setParameter('chatType', $chatType)
             ->setMaxResults(1);
         $chatRoom = $qb->getQuery()->getResult();
         if (is_array($chatRoom) AND sizeof($chatRoom) == 1) {

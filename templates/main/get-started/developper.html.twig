@@ -1,0 +1,157 @@
+{% set scriptSrc= absolute_url(asset('build/socket-chat.js')) %}
+{% set script='<script data-socket-chat type="text/javascript" src="'~scriptSrc~'?id='~ tempSiteId ~'&user_id=[connected_user_id]&user_name=[connected_user_name]&temps_user_id=[temp_user_id]&user_image=[connected_user_image_url]"></script>' %}
+{% set tempUserScript='<script data-socket-chat type="text/javascript" src="'~scriptSrc~'?id='~ tempSiteId ~'&temps_user_id=[temp_user_id]"></script>' %}
+{% set connectedUserScript='<script data-socket-chat type="text/javascript" src="'~scriptSrc~'?id='~ tempSiteId ~'&user_id=[connected_user_id]&user_name=[connected_user_name]&user_image=[connected_user_image_url]"></script>' %}
+{% set body='</body>' %}
+<ol>
+    <li>{{ 'demo.developper.insert'|trans }}
+        <br><code>{{ script }}</code><br>
+        {{ 'demo.developper.all_page'|trans }}
+        <code>{{ body }}</code><br>
+        <ul>
+            <li>[connected_user_id] <strong>must</strong> be replace by the connected user id (can be a string, max 36
+                characters)
+            </li>
+            <li>[connected_user_name] should be replace by the connected user name (optionnal)</li>
+            <li>[connected_user_image_url] should be replace by the url of the profile picture of the user (optionnal)
+            </li>
+            <li>[temp_user_id] <strong>must</strong> be replace by the temporary user id (can be a string, max 36
+                characters)
+            </li>
+            <li style="color: red">Do not put the char "," in any parameters</li>
+        </ul>
+        It means that either the [connected_user_id] must be defined or [temp_user_id] must be defined<br>
+        <p>
+            <a class="" data-toggle="collapse" href="#exampleTempUserId" role="button" aria-expanded="false"
+               aria-controls="exampleTempUserId">
+                Example case for a visitor
+            </a>
+        </p>
+        <div class="collapse" id="exampleTempUserId">
+            <div class="card card-body">
+                Just write:
+                <br><code>{{ tempUserScript }}</code><br>
+            </div>
+        </div>
+        <p>
+            <a class="" data-toggle="collapse" href="#defineTempUserId" role="button" aria-expanded="false"
+               aria-controls="defineTempUserId">
+                How to define [temp_user_id] ?
+            </a>
+        </p>
+        <div class="collapse" id="defineTempUserId">
+            <div class="card card-body">
+                <p>The best way to define a temporary user id is to set a cookie. The first time a visitor connect to
+                    your webSite set a cookie with a random id.<br>
+                    It can be done with the
+                    <a target="_blank" href="http://php.net/manual/{{ app.request.locale }}/function.uniqid.php">uniqid()</a>
+                    function in php.<br>
+                    Then put the value of the cookie instead of [temp_user_id]</p>
+            </div>
+        </div>
+        <p>
+            <a class="" data-toggle="collapse" href="#exampleConnectedUserId" role="button" aria-expanded="false"
+               aria-controls="exampleConnectedUserId">
+                Example case for a connected user
+            </a>
+        </p>
+        <div class="collapse" id="exampleConnectedUserId">
+            <div class="card card-body">
+                Just write:
+                <br><code>{{ script }}</code><br>
+                Note that you can remove the temp_user_id parameter:
+                <br><code>{{ connectedUserScript }}</code><br>
+                But it's higly recommand to keep both [connected_user_id] and [temp_user_id] if you have it
+            </div>
+        </div>
+        <p>
+            <a class="" data-toggle="collapse" href="#missingInformations" role="button" aria-expanded="false"
+               aria-controls="missingInformations">
+                What if I do not have image url or any optionnal parameter ?
+            </a>
+        </p>
+        <div class="collapse" id="missingInformations">
+            <div class="card card-body">
+                Don't write the parameter or let them empty.
+            </div>
+        </div>
+    </li>
+    <li>{{ 'demo.developper.open_page'|trans }}</li>
+    <li>{{ 'demo.developper.back_start'|trans }}</li>
+    <li>If you still don't know how to do, go watch the tuto and get example code on the page :
+        <a href="{{ path('demo') }}">Demo</a> !
+    </li>
+</ol>
+
+<div id="accordion-developper">
+    <div class="card">
+        <div class="card-header" id="accordion-question-1">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+                        aria-controls="collapseOne">
+                    Before to do that what will really happen ?
+                </button>
+            </h5>
+        </div>
+        <div id="collapseOne" class="collapse" aria-labelledby="accordion-question-1"
+             data-parent="#accordion-developper">
+            <div class="card-body">
+                Explanation here
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" id="accordion-question-2">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+                        aria-controls="collapseTwo">
+                    Can I use this script on multiple websites ?
+                </button>
+            </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="accordion-question-2"
+             data-parent="#accordion-developper">
+            <div class="card-body">
+                Explanation here
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" id="accordion-question-3">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true"
+                        aria-controls="collapseThree">
+                    Which technologies is used for the chat ?
+                </button>
+            </h5>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="accordion-question-3"
+             data-parent="#accordion-developper">
+            <div class="card-body">
+                Explanation here (tell it's socket io)
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" id="accordion-question-4">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true"
+                        aria-controls="collapseFour">
+                    Why I must specify a user id or a temp user id ?
+                </button>
+            </h5>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="accordion-question-4"
+             data-parent="#accordion-developper">
+            <div class="card-body">
+                Explanation here that, if they do not, we cannot get the previous message because we don't know the user
+            </div>
+        </div>
+    </div>
+</div>
+<button type="button" data-ajax-call="{{ path('ajax_access_dashboard') }}" data-ajax-href="{{ path('dashboard') }}"
+        class="btn btn-primary btn-lg btn-block">{{ 'word.start'|trans }} !
+</button>

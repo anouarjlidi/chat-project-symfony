@@ -95,65 +95,85 @@ class ApiController extends AbstractController
     public function getChatRoom(Request $request)
     {
         $response = new Response();
-        $site_id = $request->request->get('site_id');
         $user_id = $request->request->get('user_id');
         $temp_user_id = $request->request->get('temp_user_id');
         $chatType = $request->request->get('chat_type');
-        $arrayUserIds = explode(",", $user_id);
-        $em = $this->getDoctrine()->getManager();
-        $webSite = $em->getRepository("App\Entity\WebSite")->find($site_id);
-        $array = [];
-        if (($user_id == "" OR $user_id == null) AND ($temp_user_id == "" OR $temp_user_id == null)) {
-//            retourner un message pour dire qu'il faut identifier le user
-//            dans le cas ou les 2 sont définis on prend le user id et si son temp user id
+        if ($user_id == "null" OR $user_id == "") $user_id = null;
+        if ($temp_user_id == "null" OR $temp_user_id == "") $temp_user_id = null;
+        $return = [];
+        if ($user_id == null AND $temp_user_id == null AND ($chatType == "admin" OR $chatType == "private_chat")) {
+            $return = [
+                'message' => 'user_id and temp_user_id are empty !'
+            ];
+        }
+        if ($chatType != "admin" AND $chatType != "private_chat" AND $chatType != "private_group" AND $chatType != "public_group") {
+            $return = [
+                'message' => 'invalid chat type !'
+            ];
         } else {
-            $foreignUserRepo = $em->getRepository("App\Entity\ForeignUser");
-            $foreignUsers = $foreignUserRepo->findBy([
-                "webSite" => $site_id,
-                "userId" => $arrayUserIds
-            ]);
-            $arrayForeignUserIds = [];
-            foreach ($foreignUsers as $foreignUser) {
-                if ($foreignUser instanceof ForeignUser) array_push($arrayForeignUserIds, $foreignUser->getId());
-            }
-            $arrayForeignUserUserIds = [];
-            foreach ($foreignUsers as $foreignUser) {
-                if ($foreignUser instanceof ForeignUser) array_push($arrayForeignUserUserIds, $foreignUser->getUserId());
-            }
-            $chatRoom = $em->getRepository("App\Entity\ChatRoom")->getChatRoomWithUsers($chatType, $arrayForeignUserIds);
-            if (!$chatRoom instanceof ChatRoom) {
-                $chatRoom = new ChatRoom();
-                $chatRoom->setChatType($chatType);
-                $chatRoom->setWebSite($webSite);
-                foreach ($arrayUserIds as $user_id) {
-                    $foreignUserPersist = null;
-                    if (in_array($user_id, $arrayForeignUserUserIds)) {
-                        foreach ($foreignUsers as $foreignUser) {
-                            if ($foreignUser instanceof ForeignUser AND $foreignUser->getUserId() == $user_id) $foreignUserPersist = $foreignUser;
-                            break;
+            $site_id = $request->request->get('site_id');
+            $arrayUserUserIds = explode(",", $user_id);
+            $arrayTempUserIds = explode(",", $temp_user_id);
+            $em = $this->getDoctrine()->getManager();
+            $webSite = $em->getRepository("App\Entity\WebSite")->find($site_id);
+            if ($chatType == "admin" OR $chatType == "private_chat") {
+                $foreignUserIds = [];
+                $foreignUsers = $em->getRepository("App\Entity\ForeignUser")->getForeignUsersWithUserIdAndTempId($webSite->getId(), $arrayUserUserIds, $arrayTempUserIds);
+                //update foreign user datas
+                foreach ($foreignUsers as $foreignUser) {
+                    array_push($foreignUserIds, $foreignUser->getId());
+                    if ($chatType == "admin" AND sizeof($arrayUserUserIds) == 1 AND sizeof($arrayTempUserIds) == 1) {
+                        if ($foreignUser->getUserId() == null) {
+                            $foreignUser->setUserId($arrayUserUserIds[0]);
+                            $em->persist($foreignUser);
                         }
-                    } else {
-                        $foreignUserPersist = new ForeignUser();
-                        $foreignUserPersist->setUserId($user_id);
-                        $foreignUserPersist->setWebSite($webSite);
+                        if ($foreignUser->getTempId() == null) {
+                            $foreignUser->setTempId($arrayTempUserIds[0]);
+                            $em->persist($foreignUser);
+                        }
                     }
-                    $chatRoom->addForeignUsers($foreignUserPersist);
                 }
-                $em->persist($chatRoom);
-            }
-            if (sizeof($chatRoom->getForeignUsers()) != sizeof($arrayUserIds)) {
-                //optimiser avec un compteur de foreign users à la place de getForeignUsers()
-                $array = [
-                    'chatRoom' => null
-                ];
-            } else {
-                $em->flush();
-                $array = [
+                //getChatroom
+                $chatRoom = $em->getRepository("App\Entity\ChatRoom")->getChatRoomWithForeignUsers($chatType, $foreignUserIds, $webSite->getId());
+                if (!$chatRoom instanceof ChatRoom) {
+                    $chatRoom = new ChatRoom();
+                    $chatRoom->setWebSite($webSite);
+                    $chatRoom->setChatType($chatType);
+                    if ($chatType == "admin") {
+                        if (sizeof($foreignUsers) < 1) {
+                            $foreignUser = new ForeignUser();
+                            $foreignUser->setWebSite($webSite);
+                            $foreignUser->setUserId($arrayUserUserIds[0]);
+                            $foreignUser->setTempId($arrayTempUserIds[0]);
+                            $chatRoom->addForeignUsers($foreignUser);
+                            $em->persist($chatRoom);
+                            $return = [
+                                'chatRoom' => $chatRoom->getPublicObject()
+                            ];
+                        } elseif (sizeof($foreignUsers) == 1) {
+                            $chatRoom->addForeignUsers($foreignUsers[0]);
+                            $em->persist($chatRoom);
+                            $return = [
+                                'chatRoom' => $chatRoom->getPublicObject()
+                            ];
+                        } else {
+                            $return = [
+                                'message' => 'invalid number of user for an admin chatroom'
+                            ];
+                        }
+                    } elseif ($chatType == "private_chat" AND sizeof($foreignUsers) < 2) {
+//                        c'est la le truc compliqué il faudra probablement dev cette partie avec les groupes privés
+                    }
+                }
+                $return = [
                     'chatRoom' => $chatRoom->getPublicObject()
                 ];
+            } else {
+//                chatrooms for groups
             }
+            $em->flush();
         }
-        $response->setContent(json_encode($array));
+        $response->setContent(json_encode($return));
         $response->headers->set('Content-Type', 'application/json');
 //        if ($webSite->getInstalled() == true AND $webSite->getIsOnline() == true AND filter_var($webSite->getUrl(), FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
 //            $response->headers->set('Access-Control-Allow-Origin', $webSite->getUrl());

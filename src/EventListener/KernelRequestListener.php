@@ -93,30 +93,30 @@ class KernelRequestListener
         if (strpos($route, "ajax_") === 0 OR strpos($route, "api_")) {
             return;
         }
-        $redirectToDashBoard = ["demo", "try_it_now"];
-        $redirectToDemo = "dashboard";
-        if (in_array($route, $redirectToDashBoard)) {
-            $repoWebSite = $this->em->getRepository("App\Entity\WebSite");
-            if (!$this->user instanceof User) {
-                $arrayDashBoard = ["installed" => true, "adminTempUser" => $this->tempUserId];
-                $webSiteInstalled = $repoWebSite->findBy($arrayDashBoard);
-            } else {
-                $webSiteInstalled = $repoWebSite->getInstalledWebSitesForUser($this->user);
-            }
-            if (sizeof($webSiteInstalled) > 0) {
-                $event->setResponse(new RedirectResponse($this->router->generate('dashboard')));
-            }
-        }
-        if (strpos($route, $redirectToDemo) !== false) {
-            $repoWebSite = $this->em->getRepository("App\Entity\WebSite");
-            if (!$this->user instanceof User) {
-                $arrayDashBoard = ["installed" => true, "adminTempUser" => $this->tempUserId];
-                $webSiteInstalled = $repoWebSite->findBy($arrayDashBoard);
-                if (sizeof($webSiteInstalled) == 0) {
-                    $event->setResponse(new RedirectResponse($this->router->generate('demo')));
-                }
-            }
-        }
+//        $redirectToDashBoard = ["demo", "try_it_now"];
+//        $redirectToDemo = "dashboard";
+//        if (in_array($route, $redirectToDashBoard)) {
+//            $repoWebSite = $this->em->getRepository("App\Entity\WebSite");
+//            if (!$this->user instanceof User) {
+//                $arrayDashBoard = ["installed" => true, "adminTempUser" => $this->tempUserId];
+//                $webSiteInstalled = $repoWebSite->findBy($arrayDashBoard);
+//            } else {
+//                $webSiteInstalled = $repoWebSite->getInstalledWebSitesForUser($this->user);
+//            }
+//            if (sizeof($webSiteInstalled) > 0) {
+//                $event->setResponse(new RedirectResponse($this->router->generate('dashboard')));
+//            }
+//        }
+//        if (strpos($route, $redirectToDemo) !== false) {
+//            $repoWebSite = $this->em->getRepository("App\Entity\WebSite");
+//            if (!$this->user instanceof User) {
+//                $arrayDashBoard = ["installed" => true, "adminTempUser" => $this->tempUserId];
+//                $webSiteInstalled = $repoWebSite->findBy($arrayDashBoard);
+//                if (sizeof($webSiteInstalled) == 0) {
+//                    $event->setResponse(new RedirectResponse($this->router->generate('demo')));
+//                }
+//            }
+//        }
     }
 
     /**

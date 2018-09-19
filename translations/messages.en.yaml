@@ -5,14 +5,14 @@ navbar:
     demo: 'Demo'
     features: 'Features'
     pricing: 'Pricing'
-    try.now: 'Try it now !'
+    getstarted: 'Get started !'
 
 demo:
     developper:
         insert: 'Please insert this script'
         all_page: 'on all your page just before the tag'
-        open_page: 'Open the home page of your website or anypage (nothing will happen to your website)'
-        back_start: 'Then come back here, and click on Start ! (nothing will happen to your website)'
+        open_page: 'Once you have insert the script, open the home page of your website or anypage (nothing will happen/appear on your website)'
+        back_start: 'Then come back here, and click on Start ! (nothing will happen/appear on your website)'
         not_installed: 'It seems that you didn''t install the script'
 
 dashboard:
@@ -20,6 +20,8 @@ dashboard:
 
 sentence:
     redirect: 'You will be redirect ...'
+    error:
+        contact: 'An unknowed error occur please contact us.'
 
 word:
     wordpress: 'Wordpress'

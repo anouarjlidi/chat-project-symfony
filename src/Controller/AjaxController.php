@@ -52,28 +52,32 @@ class AjaxController extends AbstractController
         if (sizeof($webSites) == 0) {
             //error reset les cookie
         }
+        $nbWebSiteInstalled = 0;
         foreach ($webSites as $webSite) {
             if ($webSite->getInstalled() == true) {
-//                array_push($this->messages, [
-//                    "title" => $translator->trans('word.success'),
-//                    "message" => $translator->trans('sentence.redirect'),
-//                    "class" => "success",
-//                ]);
-//                $this->timeRedirection = 2000;
-
-                array_push($this->messagesAfterRedirect, [
-                    "title" => $translator->trans('word.success'),
-                    "message" => $translator->trans('dashboard.configure'),
-                    "class" => "success",
-                ]);
-            } else {
-                array_push($this->messages, [
-                    "title" => $translator->trans('word.error'),
-                    "message" => $translator->trans('demo.developper.not_installed'),
-                    "class" => "warning",
-                ]);
-                $this->stopRedirect = true;
+                $nbWebSiteInstalled++;
             }
+        }
+        if ($nbWebSiteInstalled > 0) {
+            array_push($this->messagesAfterRedirect, [
+                "title" => $translator->trans('word.success'),
+                "message" => $translator->trans('dashboard.configure'),
+                "class" => "success",
+            ]);
+        } elseif (sizeof($webSites) > $nbWebSiteInstalled AND $nbWebSiteInstalled == 0) {
+            array_push($this->messages, [
+                "title" => $translator->trans('word.error'),
+                "message" => $translator->trans('demo.developper.not_installed'),
+                "class" => "warning",
+            ]);
+            $this->stopRedirect = true;
+        } else {
+            array_push($this->messages, [
+                "title" => $translator->trans('word.error'),
+                "message" => $translator->trans('sentence.error.contact'),
+                "class" => "danger",
+            ]);
+            $this->stopRedirect = true;
         }
         return $this->sendDatas();
     }
