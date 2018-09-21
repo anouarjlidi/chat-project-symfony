@@ -1,6 +1,6 @@
 const apiUrl = 'http://chatsymfony/api';
-const socketScript = 'http://localhost:3000/socket.io/socket.io.js';
 const socketServer = 'http://localhost:3000/';
+const socketScript = socketServer + 'socket.io/socket.io.js';
 let thisScriptSrc = '';
 let urlParams = {};
 let user_id = null;
@@ -118,11 +118,27 @@ function errorHandler(statusCode) {
     console.log("failed with status", statusCode);
 }
 
+function getAdminChatRoom(user_id, temp_user_id, site, callback) {
+    const xhr = new XMLHttpRequest();
+    const params = 'site_id=' + site.id + '&temp_user_id=' + temp_user_id + '&user_id=' + user_id + '&chat_type=admin';
+    xhr.open('POST', apiUrl + '/get-chat-room', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.send(params);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const resp = xhr.responseText;
+                const respJson = JSON.parse(resp);
+                const adminChat = respJson.chatRoom;
+                callback(adminChat);
+            }
+        }
+    };
+}
+
 function loadSocket(responseData) {
     const site = responseData.site;
     let inAdminPanel = false;
-    console.log(site);
-    console.log(urlParams);
     if (urlParams.adminpanel !== undefined && urlParams.adminpanel === "1") {
         inAdminPanel = true;
     }
@@ -131,46 +147,59 @@ function loadSocket(responseData) {
             alert("user_id && temps_user_id undefined !");
         }
     } else {
-        $(function () {
-            if (site.hasAdminChat === true || (site.hasAdminChat === false && inAdminPanel === true)) {
-                //display admin chat
-                if (urlParams.user_id === undefined || urlParams.user_id === "") {
-                    user_id = null;
-                } else {
-                    user_id = urlParams.user_id;
-                }
-                if (urlParams.temp_user_id === undefined || urlParams.temp_user_id === "") {
-                    temp_user_id = null;
-                } else {
-                    temp_user_id = urlParams.temp_user_id;
-                }
-                //toujours appeler le display admin chat room juste pour mettre à jour les users
-                displayAdminChatRoom(user_id, temp_user_id, site, function () {
+        if (site.hasAdminChat === true || (site.hasAdminChat === false && inAdminPanel === true)) {
+            //display admin chat
+            if (urlParams.user_id === undefined || urlParams.user_id === "") {
+                user_id = null;
+            } else {
+                user_id = urlParams.user_id;
+            }
+            if (urlParams.temp_user_id === undefined || urlParams.temp_user_id === "") {
+                temp_user_id = null;
+            } else {
+                temp_user_id = urlParams.temp_user_id;
+            }
+            //toujours appeler le display admin chat room juste pour mettre à jour les users
+            getAdminChatRoom(user_id, temp_user_id, site, function (adminChat) {
+                manageChatWindow(adminChat);
+                $(function () {
                     // const socket = io(socketServer);
                 });
-            }
+            });
 
-            function displayAdminChatRoom(user_id, temp_user_id, site, callback) {
-                const xhr = new XMLHttpRequest();
-                const params = 'site_id=' + site.id + '&temp_user_id=' + temp_user_id + '&user_id=' + user_id + '&chat_type=admin';
-                xhr.open('POST', apiUrl + '/get-chat-room', true);
-                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xhr.send(params);
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status === 200) {
-                            const resp = xhr.responseText;
-                            const respJson = JSON.parse(resp);
-                            const adminChat = respJson.chatRoom;
-                            console.log(adminChat);
-                            // document.body.insertAdjacentHTML('beforeend', site.templateAdminChat);
-                            // document.body.insertAdjacentHTML('beforeend', site.cssAdminChat);
-                            callback();
+            function manageChatWindow(adminChat) {
+                if (urlParams.adminpanel === "1") {
+                    if (urlParams.dashboardwindow === "admin-chat") {
+                        if ((site.hasAdminChat && !site.hasPrivateChat) || (!site.hasAdminChat && !site.hasPrivateChat)) {
+                            //on affiche que le admin chat
+                        } else {
+                            //on affiche les 2
                         }
+                    } else if (urlParams.dashboardwindow === "private-chat") {
+                        if (!site.hasAdminChat) {
+                            //on affiche que le private chat
+                        } else {
+                            //on affiche les 2
+                        }
+                    } else {
+                        alert("error! dashboardwindow is not defined");
                     }
-                };
+                } else {
+                    if (site.hasAdminChat && !site.hasPrivateChat) {
+                        //on affiche que le admin chat
+                        console.log(adminChat);
+                    } else if (!site.hasAdminChat && site.hasPrivateChat) {
+                        //on affiche que le private chat
+                    } else if (site.hasAdminChat && site.hasPrivateChat) {
+                        //on affiche les2
+                    } else {
+                        //on fait rien
+                    }
+                }
+                // document.body.insertAdjacentHTML('beforeend', site.templateAdminChat);
+                // document.body.insertAdjacentHTML('beforeend', site.cssAdminChat);
             }
-        });
+        }
     }
 }
 

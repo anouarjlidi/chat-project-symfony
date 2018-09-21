@@ -40,12 +40,12 @@ class WebSite
     private $isOnline;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="boolean")
      */
     private $hasAdminChat;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="boolean")
      */
     private $hasPrivateChat;
 
@@ -110,6 +110,8 @@ class WebSite
         $this->installed = false;
         $this->cssAdminChat = "";
         $this->templateAdminChat = "";
+        $this->hasAdminChat = false;
+        $this->hasPrivateChat = false;
     }
 
     /**
