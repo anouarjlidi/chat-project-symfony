@@ -1,3 +1,7 @@
 @import "~startbootstrap-sb-admin/vendor/fontawesome-free/css/all.min.css";
 @import "~startbootstrap-sb-admin/vendor/datatables/dataTables.bootstrap4.min.css";
 @import "~startbootstrap-sb-admin/css/sb-admin.min.css";
+
+#wrapper #content-wrapper {
+  padding: 0;
+}

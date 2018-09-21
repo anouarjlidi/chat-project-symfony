@@ -87,12 +87,22 @@ class WebSite
     /**
      * @ORM\Column(type="text")
      */
-    private $cssAdminChat;
+    private $cssChat;
 
     /**
      * @ORM\Column(type="text")
      */
     private $templateAdminChat;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $templatePrivateChat;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $templateMainChatWindow;
 
     /**
      * @ORM\OneToMany(targetEntity="ForeignUser", mappedBy="webSite")
@@ -108,8 +118,10 @@ class WebSite
         $this->users = new ArrayCollection();
         $this->foreignUsers = new ArrayCollection();
         $this->installed = false;
-        $this->cssAdminChat = "";
         $this->templateAdminChat = "";
+        $this->templateMainChatWindow = "";
+        $this->templatePrivateChat = "";
+        $this->cssChat = "";
         $this->hasAdminChat = false;
         $this->hasPrivateChat = false;
     }
@@ -384,22 +396,6 @@ class WebSite
     /**
      * @return mixed
      */
-    public function getCssAdminChat()
-    {
-        return $this->cssAdminChat;
-    }
-
-    /**
-     * @param mixed $cssAdminChat
-     */
-    public function setCssAdminChat($cssAdminChat): void
-    {
-        $this->cssAdminChat = $cssAdminChat;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getTemplateAdminChat()
     {
         return $this->templateAdminChat;
@@ -411,5 +407,53 @@ class WebSite
     public function setTemplateAdminChat($templateAdminChat): void
     {
         $this->templateAdminChat = $templateAdminChat;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTemplatePrivateChat()
+    {
+        return $this->templatePrivateChat;
+    }
+
+    /**
+     * @param mixed $templatePrivateChat
+     */
+    public function setTemplatePrivateChat($templatePrivateChat): void
+    {
+        $this->templatePrivateChat = $templatePrivateChat;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCssChat()
+    {
+        return $this->cssChat;
+    }
+
+    /**
+     * @param mixed $cssChat
+     */
+    public function setCssChat($cssChat): void
+    {
+        $this->cssChat = $cssChat;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTemplateMainChatWindow()
+    {
+        return $this->templateMainChatWindow;
+    }
+
+    /**
+     * @param mixed $templateMainChatWindow
+     */
+    public function setTemplateMainChatWindow($templateMainChatWindow): void
+    {
+        $this->templateMainChatWindow = $templateMainChatWindow;
     }
 }

@@ -38,6 +38,7 @@ class ConfigController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
         if ($website->getIsOnline() AND $website->getUpdated()->diff(new \DateTime('NOW'))->d != 0) {
+//        if ($website->getIsOnline()) {
             $website = $webSiteService->refresh($website);
             $em = $this->getDoctrine()->getManager();
             $em->persist($website);

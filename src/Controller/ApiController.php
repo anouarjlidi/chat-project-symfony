@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\WebSite as WebSiteService;
+use App\Service\WebSiteView as WebSiteServiceView;
 
 /**
  * @Route("/api")
@@ -19,19 +20,29 @@ class ApiController extends AbstractController
     /**
      * @Route("/request", name="api_request")
      * @param Request $request
+     * @param WebSiteService $webSiteService
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function request(Request $request)
+    public function request(Request $request, WebSiteService $webSiteService, WebSiteServiceView $webSiteServiceView)
     {
         $response = new Response();
         $site_id = $request->request->get('site_id');
         $em = $this->getDoctrine()->getManager();
         $webSiteRepo = $em->getRepository('App\Entity\WebSite');
         $webSite = $webSiteRepo->find($site_id);
+        if ($webSite instanceof WebSite) {
+            if ($webSite->getIsOnline() == false OR $webSite->getInstalled() == false) {
+                $webSite = $this->install($request, $webSiteService, $webSite);
+                $em->persist($webSite);
+            }
+            $em->flush();
+        }
+//        FOR DEV TO CHANGE HTML AND CSS IN PHPSTORM
+        $webSite = $webSiteServiceView->configureDefaultValueWebSite($webSite, true);
+//        FOR DEV TO CHANGE HTML AND CSS IN PHPSTORM
         $array = [
             'site' => $webSite->getPublicObject()
         ];
-
         $response->setContent(json_encode($array));
         $response->headers->set('Content-Type', 'application/json');
 //        if ($webSite->getInstalled() == true AND $webSite->getIsOnline() == true AND filter_var($webSite->getUrl(), FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
@@ -43,21 +54,16 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/install", name="api_install")
      * @param Request $request
      * @param WebSiteService $webSiteService
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param WebSite $webSite
+     * @return WebSite
      */
-    public function install(Request $request, WebSiteService $webSiteService)
+    private function install(Request $request, WebSiteService $webSiteService, WebSite $webSite)
     {
-        $response = new Response();
-        $site_id = $request->request->get('site_id');
         $source_code = $request->request->get('source_code');
         $url = $request->request->get('url');
         $jsScriptSrc = $request->request->get('thisScriptSrc');
-        $em = $this->getDoctrine()->getManager();
-        $webSiteRepo = $em->getRepository('App\Entity\WebSite');
-        $webSite = $webSiteRepo->find($site_id);
         if ($webSite instanceof WebSite) {
             if ($webSite->getIsOnline() != true OR $webSite->getInstalled() == false) {
                 $webSite->setInstalled(true);
@@ -73,18 +79,9 @@ class ApiController extends AbstractController
                 }
                 $webSite->setUrl($url);
                 $webSite->setSourceCode($source_code);
-                $em->persist($webSite);
-                $em->flush();
             }
         }
-        $array = [
-            'installed' => $webSite->getInstalled()
-        ];
-
-        $response->setContent(json_encode($array));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-        return $response;
+        return $webSite;
     }
 
     /**
