@@ -1,6 +1,6 @@
 {% set idScript = currentWebSite.id %}
 {#if website is installed#}
 <iframe style='width: 100%;min-height: calc(100vh - 117px);'
-        srcdoc='{{ currentWebSite.sourceCode|adminPanelSourceCode(idScript, 'admin-chat') }}'
+        srcdoc="{{ currentWebSite.sourceCode|adminPanelSourceCode(idScript, 'admin-chat') }}"
 >
 </iframe>

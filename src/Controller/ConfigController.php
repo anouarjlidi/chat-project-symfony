@@ -37,6 +37,12 @@ class ConfigController extends AbstractController
         if (!in_array($website, $webSites)) {
             return $this->redirectToRoute('dashboard');
         }
+        if ($website->getIsOnline() AND $website->getUpdated()->diff(new \DateTime('NOW'))->d != 0) {
+            $website = $webSiteService->refresh($website);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($website);
+            $em->flush();
+        }
         return $this->render('config/content/website.html.twig', [
             "webSites" => $webSites,
             "currentWebSite" => $website

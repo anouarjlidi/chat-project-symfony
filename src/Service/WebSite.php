@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use App\Entity\WebSite as WebSiteEntity;
 
 class WebSite
 {
@@ -47,30 +48,13 @@ class WebSite
         return $webSites;
     }
 
-    public function getDefaultCssAdminChat()
+    public function refresh(WebSiteEntity $webSite)
     {
-        ob_start();
-        ?>
-        <style>
-            #admin_chat {
-                background-color: red;
-            }
-        </style>
-        <?php
-        $data = ob_get_contents();
-        ob_end_clean();
-        return $data;
-    }
-
-    public function getDefaultTemplateAdminChat()
-    {
-        ob_start(); ?>
-        <div id="admin_chat">
-            default template
-        </div>
-        <?php
-        $data = ob_get_contents();
-        ob_end_clean();
-        return $data;
+        try {
+            $source_code = file_get_contents($webSite->getUrl());
+            $webSite->setSourceCode($source_code);
+        } catch (\Exception $e) {
+        }
+        return $webSite;
     }
 }
